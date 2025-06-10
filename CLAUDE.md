@@ -3,6 +3,8 @@
 ## Technology-Specific Best Practices
 
 When working on projects/tasks, load the appropriate technology-specific best practices file. These files provide comprehensive defaults but can and should be customized to match your team's specific workflows, coding standards, and project requirements.
+
+**For detailed instructions on customizing best practices, see: `.claude/guides/customization-guide.md`**
 - **Node.js**: `.claude/best_practices/nodejs-best-practices.md`
 - **Python**: `.claude/best_practices/python-best-practices.md`
 - **PHP**: `.claude/best_practices/php-best-practices.md`

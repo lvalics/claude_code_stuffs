@@ -26,6 +26,8 @@ This repository contains structured guidelines, best practices, and tools for ef
 │   ├── commands/
 │   │   ├── jira.md
 │   │   ├── fix-github-issues.md
+│   ├── guides/             # How-to guides
+│   │   └── customization-guide.md
 │   └── templates/          # Project templates
 │       ├── code-review-checklist.md
 │       ├── pull-request-template.md
@@ -94,7 +96,11 @@ Environment-specific logging strategies:
 
 ### Customizing Best Practices
 
-The best practices files in `.claude/best_practices/` provide comprehensive defaults based on industry standards. However, these files are meant to be customized to match your team's specific workflows and requirements. Feel free to edit these files to:
+The best practices files in `.claude/best_practices/` provide comprehensive defaults based on industry standards. However, these files are meant to be customized to match your team's specific workflows and requirements. 
+
+**📖 See the [Customization Guide](.claude/guides/customization-guide.md) for detailed instructions on how to customize effectively.**
+
+Feel free to edit these files to:
 - Add project-specific conventions
 - Modify guidelines to match your team's practices
 - Include company-specific requirements
