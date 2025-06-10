@@ -5,8 +5,15 @@
 When working on projects/tasks, load the appropriate technology-specific best practices file:
 - **Node.js**: `.claude/commands/nodejs-best-practices.md`
 - **Python**: `.claude/commands/python-best-practices.md`
+- **PHP**: `.claude/commands/php-best-practices.md`
 - **Java**: `.claude/commands/java-best-practices.md`
+- **Angular**: `.claude/commands/angular-best-practices.md`
+- **ApostropheCMS**: `.claude/commands/apostrophe-best-practices.md`
 - **Docker**: `.claude/commands/docker-best-practices.md`
+- **API Design**: `.claude/commands/api-design-best-practices.md`
+- **Database**: `.claude/commands/database-best-practices.md`
+- **Security**: `.claude/commands/security-best-practices.md`
+- **Logging & Monitoring**: `.claude/commands/logging-monitoring-best-practices.md`
 
 ## JIRA Integration
 
@@ -63,3 +70,29 @@ When working on projects/tasks, load the appropriate technology-specific best pr
    - Address one issue at a time
    - Verify each fix before proceeding
    - Check off completed items in the checklist
+
+## API Development
+
+- Follow OpenAPI/Swagger specifications in `.claude/commands/api-design-best-practices.md`
+- Implement RESTful best practices
+- Document all endpoints with request/response examples
+
+## Database Design
+
+- Reference `.claude/commands/database-best-practices.md` for SQL/NoSQL guidelines
+- Follow migration strategies and naming conventions
+- Implement proper indexing and query optimization
+
+## Security Implementation
+
+- Follow OWASP compliance checklist in `.claude/commands/security-best-practices.md`
+- Integrate security scanning into CI/CD pipeline
+- Implement proper authentication and authorization
+
+## Logging and Monitoring
+
+- Follow standards in `.claude/commands/logging-monitoring-best-practices.md`
+- Environment-specific logging:
+  - **Development**: Console and error log output for debugging
+  - **Production**: No console output, only error logs unless explicitly configured
+- Set up performance monitoring and alerting
