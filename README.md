@@ -26,6 +26,11 @@ This repository contains structured guidelines, best practices, and tools for ef
 │   ├── commands/
 │   │   ├── jira.md
 │   │   ├── fix-github-issues.md
+│   ├── config/             # Team configurations
+│   │   ├── examples/       # Example configurations
+│   │   ├── config-schema.yaml
+│   │   ├── default-config.yaml
+│   │   └── load-config.sh
 │   ├── guides/             # How-to guides
 │   │   └── customization-guide.md
 │   └── templates/          # Project templates
@@ -91,6 +96,13 @@ Comprehensive guides for:
 - **Code Quality**: Linting, testing, and review processes
 - **API Security**: Authentication, rate limiting, CORS
 - **Database Security**: Query parameterization, encryption
+
+### ⚙️ Team Configuration
+
+- **Config Directory**: `.claude/config/` stores all team-specific settings
+- **Example Configs**: Pre-built configurations for startups, enterprises, and open source
+- **Config Schema**: Validation schema for configuration files
+- **Config Loader**: Shell script to load configurations as environment variables
 
 ### 📊 Logging & Monitoring
 

@@ -1,0 +1,116 @@
+# Configuration Schema
+# Defines the structure and valid values for team configuration files
+
+team:
+  type: object
+  required: true
+  properties:
+    name:
+      type: string
+      required: true
+      description: "Team or project name"
+    size:
+      type: string
+      required: true
+      enum:
+        - "Solo developer"
+        - "Small team (2-5)"
+        - "Medium team (6-15)"
+        - "Large team (16+)"
+        - "Variable (community-driven)"
+
+project:
+  type: object
+  required: true
+  properties:
+    type:
+      type: string
+      required: true
+      enum:
+        - "Web application"
+        - "API/Microservices"
+        - "Mobile app"
+        - "Desktop application"
+        - "Library/Package"
+        - "Full-stack application"
+    industry:
+      type: string
+      required: true
+      enum:
+        - "General/Other"
+        - "Finance/FinTech"
+        - "Healthcare"
+        - "E-commerce"
+        - "Education"
+        - "Gaming"
+        - "Enterprise"
+
+technologies:
+  type: array
+  required: false
+  items:
+    type: string
+    examples:
+      - "Node.js"
+      - "Python"
+      - "PHP"
+      - "Java"
+      - "Angular"
+      - "React"
+      - "Vue"
+      - "Docker"
+      - "Kubernetes"
+
+code_style:
+  type: object
+  required: false
+  properties:
+    indentation:
+      type: string
+      enum: ["2 spaces", "4 spaces", "Tabs"]
+    max_line_length:
+      type: integer
+      minimum: 80
+      maximum: 120
+    naming_convention:
+      type: string
+      enum: ["camelCase", "snake_case", "PascalCase", "kebab-case"]
+
+testing:
+  type: object
+  required: false
+  properties:
+    approach:
+      type: string
+      enum:
+        - "TDD (Test-Driven Development)"
+        - "BDD (Behavior-Driven Development)"
+        - "Traditional (tests after code)"
+        - "Minimal testing"
+    minimum_coverage:
+      type: integer
+      minimum: 0
+      maximum: 100
+
+workflow:
+  type: object
+  required: false
+  properties:
+    branching_strategy:
+      type: string
+      enum:
+        - "gitflow"
+        - "feature/TASK-ID"
+        - "TASK-ID"
+        - "feature/description"
+        - "custom"
+    pull_requests:
+      type: object
+      properties:
+        reviews_required:
+          type: string
+          enum:
+            - "No reviews needed"
+            - "1 reviewer"
+            - "2 reviewers"
+            - "Team lead approval"

@@ -1,0 +1,71 @@
+# Enterprise Team Configuration Example
+# Large team with strict compliance and process requirements
+
+team:
+  name: "EnterpriseCorpDev"
+  size: "Large team (16+)"
+  structure:
+    - "Frontend Team"
+    - "Backend Team"
+    - "DevOps Team"
+    - "QA Team"
+    
+project:
+  type: "Full-stack application"
+  industry: "Finance/FinTech"
+  compliance:
+    - "SOC2"
+    - "PCI-DSS"
+    - "ISO 27001"
+    
+technologies:
+  - Java
+  - Spring Boot
+  - Angular
+  - Oracle DB
+  - Kubernetes
+  - Jenkins
+  
+code_style:
+  indentation: "4 spaces"
+  max_line_length: 120
+  naming_convention: "camelCase"
+  enforce_javadoc: true
+  
+testing:
+  approach: "TDD (Test-Driven Development)"
+  minimum_coverage: 90
+  unit_test_coverage: 95
+  integration_test_coverage: 85
+  security_testing: "mandatory"
+  performance_testing: "mandatory"
+  
+workflow:
+  branching_strategy: "gitflow"
+  pull_requests:
+    reviews_required: "2 reviewers"
+    tech_lead_approval: true
+    security_review: true
+    merge_strategy: "merge commit"
+  deployment:
+    strategy: "scheduled releases"
+    environments: ["dev", "test", "uat", "staging", "production"]
+    approval_required: ["uat", "staging", "production"]
+    
+documentation:
+  api_docs: "mandatory"
+  architecture_docs: "mandatory"
+  runbooks: "mandatory"
+  changelog: "mandatory"
+  
+security:
+  code_scanning: "every commit"
+  dependency_scanning: "daily"
+  penetration_testing: "quarterly"
+  security_training: "mandatory"
+  
+meetings:
+  daily_standup: true
+  sprint_planning: "2 weeks"
+  retrospectives: true
+  architecture_review: "monthly"

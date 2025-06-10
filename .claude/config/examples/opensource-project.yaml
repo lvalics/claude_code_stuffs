@@ -1,0 +1,64 @@
+# Open Source Project Configuration Example
+# Community-driven project with focus on contribution ease
+
+team:
+  name: "AwesomeOSSProject"
+  size: "Variable (community-driven)"
+  maintainers: 3
+  
+project:
+  type: "Library/Package"
+  industry: "General/Other"
+  license: "MIT"
+  
+technologies:
+  - Python
+  - pytest
+  - GitHub Actions
+  
+code_style:
+  indentation: "4 spaces"  # PEP 8
+  max_line_length: 88     # Black formatter default
+  naming_convention: "snake_case"
+  formatter: "black"
+  linter: "flake8"
+  
+testing:
+  approach: "TDD (Test-Driven Development)"
+  minimum_coverage: 95
+  require_tests_for_pr: true
+  
+workflow:
+  branching_strategy: "feature/description"
+  pull_requests:
+    reviews_required: "1 reviewer"
+    maintainer_approval: true
+    ci_must_pass: true
+    merge_strategy: "squash"
+  issues:
+    templates: ["bug", "feature", "documentation"]
+    labels: ["good first issue", "help wanted", "bug", "enhancement"]
+    
+contribution:
+  code_of_conduct: true
+  contributing_guide: true
+  issue_templates: true
+  pr_template: true
+  
+documentation:
+  readme: "comprehensive"
+  api_reference: "auto-generated"
+  tutorials: true
+  examples: true
+  changelog: "keep-a-changelog format"
+  
+community:
+  discussions: "GitHub Discussions"
+  chat: "Discord"
+  twitter: true
+  
+ci_cd:
+  test_on: ["ubuntu", "macos", "windows"]
+  python_versions: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+  publish_to: "PyPI"
+  release_automation: true

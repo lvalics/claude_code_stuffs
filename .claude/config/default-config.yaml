@@ -1,0 +1,39 @@
+# Default Configuration Template
+# Copy this file and customize for your team
+
+# Team Information
+team:
+  name: "Your Team Name"
+  size: "Small team (2-5)"  # Choose from: Solo developer, Small team (2-5), Medium team (6-15), Large team (16+)
+  
+# Project Details  
+project:
+  type: "Web application"  # Choose from: Web application, API/Microservices, Mobile app, Desktop application, Library/Package, Full-stack application
+  industry: "General/Other"  # Choose from: General/Other, Finance/FinTech, Healthcare, E-commerce, Education, Gaming, Enterprise
+  
+# Technology Stack
+technologies:
+  - Node.js
+  - React
+  # Add more as needed
+  
+# Coding Standards
+code_style:
+  indentation: "2 spaces"  # Choose from: 2 spaces, 4 spaces, Tabs
+  max_line_length: 80      # Typically 80-120
+  naming_convention: "camelCase"  # Choose from: camelCase, snake_case, PascalCase, kebab-case
+  
+# Testing Requirements
+testing:
+  approach: "TDD (Test-Driven Development)"  # Choose from: TDD, BDD, Traditional, Minimal testing
+  minimum_coverage: 80  # Percentage (0-100)
+  
+# Workflow Configuration
+workflow:
+  branching_strategy: "feature/TASK-ID"  # Choose from: gitflow, feature/TASK-ID, TASK-ID, feature/description, custom
+  pull_requests:
+    reviews_required: "1 reviewer"  # Choose from: No reviews needed, 1 reviewer, 2 reviewers, Team lead approval
+    
+# Custom Settings (add your own)
+custom:
+  # Add any team-specific settings here

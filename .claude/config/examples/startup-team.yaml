@@ -1,0 +1,47 @@
+# Startup Team Configuration Example
+# Fast-moving small team with focus on rapid iteration
+
+team:
+  name: "FastStartup"
+  size: "Small team (2-5)"
+  culture: "Move fast and iterate"
+  
+project:
+  type: "Web application"
+  industry: "General/Other"
+  phase: "MVP"
+  
+technologies:
+  - Node.js
+  - React
+  - PostgreSQL
+  - Docker
+  
+code_style:
+  indentation: "2 spaces"
+  max_line_length: 100
+  naming_convention: "camelCase"
+  
+testing:
+  approach: "Minimal testing"  # Focus on critical paths only during MVP
+  minimum_coverage: 60
+  critical_paths_coverage: 90
+  
+workflow:
+  branching_strategy: "feature/description"
+  pull_requests:
+    reviews_required: "1 reviewer"
+    merge_strategy: "squash"
+  deployment:
+    strategy: "continuous"
+    environments: ["staging", "production"]
+    
+priorities:
+  - "Speed of development"
+  - "User feedback integration"
+  - "Minimal viable features"
+  
+customizations:
+  - skip_comprehensive_docs: true  # Document later
+  - allow_technical_debt: true     # Track for later refactoring
+  - rapid_prototyping: true        # Allow experimental code

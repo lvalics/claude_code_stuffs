@@ -1,5 +1,21 @@
 # Claude Code Development Guidelines
 
+## Team Configuration
+
+When starting a session, check for team-specific configuration files in `.claude/config/`:
+- **team-config.yaml** - Contains team size, project type, technology stack, and coding standards
+- **workflow-config.yaml** - Defines branching strategy, PR requirements, and deployment settings
+- **customization-summary.md** - Summary of all team customizations
+
+If these files don't exist, inform the user:
+```
+No team configuration found. To customize Claude Code for your team:
+Run: ./scripts/customize-framework.sh
+Or copy .claude/config/default-config.yaml to team-config.yaml and edit manually.
+```
+
+These configurations provide context about the team's specific workflows and should be considered when making suggestions or implementing features.
+
 ## Technology-Specific Best Practices
 
 When working on projects/tasks, load the appropriate technology-specific best practices file. These files provide comprehensive defaults but can and should be customized to match your team's specific workflows, coding standards, and project requirements.
@@ -31,9 +47,10 @@ When working on projects/tasks, load the appropriate technology-specific best pr
 
 ## Implementation Process
 
-1. **Read Task Specifications**: Always start by reading `/tasks/{{JIRA_TASK_ID}}/{{JIRA_TASK_ID}}-specs.md`
-2. **Create Implementation Plan**: Create `/tasks/{{JIRA_TASK_ID}}/{{JIRA_TASK_ID}}-IMPLEMENTATION.md` for review and approval
-3. **Track Changes**: 
+1. **Load Team Configuration**: First check `.claude/config/team-config.yaml` and `.claude/config/workflow-config.yaml` to understand team preferences. If not found, use defaults but suggest running `./scripts/customize-framework.sh`
+2. **Read Task Specifications**: Always start by reading `/tasks/{{JIRA_TASK_ID}}/{{JIRA_TASK_ID}}-specs.md`
+3. **Create Implementation Plan**: Create `/tasks/{{JIRA_TASK_ID}}/{{JIRA_TASK_ID}}-IMPLEMENTATION.md` for review and approval
+4. **Track Changes**: 
    - Create `claude_code_changes/` directory if it doesn't exist
    - For each session, create `claude_changes_{YYYY-MM-DD_HH-MM}.txt`
    - Begin the file with the current Git branch name and TaskID if exist.
@@ -72,6 +89,16 @@ When working on projects/tasks, load the appropriate technology-specific best pr
    - Address one issue at a time
    - Verify each fix before proceeding
    - Check off completed items in the checklist
+
+## Respecting Team Preferences
+
+When team configuration files exist in `.claude/config/`:
+- Use the specified indentation style (spaces vs tabs, 2 vs 4 spaces)
+- Follow the team's naming conventions (camelCase, snake_case, etc.)
+- Respect maximum line length settings
+- Apply the team's testing approach and coverage requirements
+- Follow the configured branching strategy and PR review process
+- Consider industry-specific requirements (healthcare, finance, etc.)
 
 ## API Development
 
