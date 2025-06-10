@@ -44,7 +44,8 @@ This repository contains structured guidelines, best practices, and tools for ef
 ├── claude_code_changes/    # Session change tracking
 ├── scripts/                # Utility scripts
 │   ├── setup-dev-env.sh   # Development environment setup
-│   └── customize-framework.sh  # Interactive customization tool
+│   ├── customize-framework.sh  # Interactive customization tool
+│   └── validate-best-practices.sh  # Validation tool for customizations
 ├── tasks/                  # Task specifications and implementations
 │   └── specs/             # Task specification documents
 ├── CLAUDE.md              # Main Claude Code guidelines
@@ -130,6 +131,8 @@ The best practices files in `.claude/best_practices/` provide comprehensive defa
 **🚀 Quick Start**: Run `./scripts/customize-framework.sh` for an interactive setup that customizes practices based on your team's needs.
 
 **📖 Manual Customization**: See the [Customization Guide](.claude/guides/customization-guide.md) for detailed instructions.
+
+**✅ Validate Customizations**: Run `./scripts/validate-best-practices.sh` to check your customizations for errors and consistency.
 
 Feel free to edit these files to:
 - Add project-specific conventions

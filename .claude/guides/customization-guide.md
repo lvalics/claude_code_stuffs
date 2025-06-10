@@ -190,6 +190,24 @@ For new team members:
 3. Include customizations in onboarding checklist
 4. Review customizations together
 
+## Validating Customizations
+
+After making customizations, run the validation script to ensure quality:
+
+```bash
+./scripts/validate-best-practices.sh
+```
+
+The validation script checks:
+- **Structure**: Required sections are present
+- **Formatting**: Proper markdown syntax and hierarchy
+- **Customization markers**: Correct format with team names
+- **Documentation**: Explanations for customizations
+- **Consistency**: Matches team configuration
+- **YAML syntax**: Valid configuration files
+
+Review the validation report at `.claude/validation-report.md` for details.
+
 ## Best Practices for Customization
 
 ### DO:
