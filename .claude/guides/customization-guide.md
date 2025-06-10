@@ -243,9 +243,26 @@ When customizations conflict:
 3. **Choose the most restrictive option** when in doubt
 4. **Set a review date** to revisit the decision
 
+## Using Templates
+
+The framework provides several templates to help with customization:
+
+### Creating New Best Practices
+Use `.claude/templates/custom-best-practice-template.md` when adding practices for technologies not yet covered.
+
+### Adding Team Customizations
+Use `.claude/templates/best-practice-addendum-template.md` to document team-specific changes without modifying the original files.
+
+### Quick Reference Guide
+Use `.claude/templates/team-quick-reference.md` to create a one-page guide for your team.
+
+### Migration Planning
+Use `.claude/templates/migration-guide-template.md` if transitioning from another framework.
+
 ## Getting Help
 
 - For questions about customization: Create an issue in your team's repo
 - For suggestions to improve defaults: Submit a PR to the framework
+- For examples from other teams: Check the `.claude/config/examples/` directory
 
 Remember: The goal of customization is to make the best practices work better for your team, not to avoid good practices altogether.

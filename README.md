@@ -36,7 +36,11 @@ This repository contains structured guidelines, best practices, and tools for ef
 │   └── templates/          # Project templates
 │       ├── code-review-checklist.md
 │       ├── pull-request-template.md
-│       └── task-spec-template.md
+│       ├── task-spec-template.md
+│       ├── custom-best-practice-template.md
+│       ├── best-practice-addendum-template.md
+│       ├── team-quick-reference.md
+│       └── migration-guide-template.md
 ├── claude_code_changes/    # Session change tracking
 ├── scripts/                # Utility scripts
 │   ├── setup-dev-env.sh   # Development environment setup
@@ -103,6 +107,13 @@ Comprehensive guides for:
 - **Example Configs**: Pre-built configurations for startups, enterprises, and open source
 - **Config Schema**: Validation schema for configuration files
 - **Config Loader**: Shell script to load configurations as environment variables
+
+### 📄 Customization Templates
+
+- **Best Practice Template**: Create new technology-specific best practices
+- **Addendum Template**: Add team customizations without modifying originals
+- **Quick Reference**: One-page team reference guide
+- **Migration Guide**: Template for teams transitioning from other frameworks
 
 ### 📊 Logging & Monitoring
 
