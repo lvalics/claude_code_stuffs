@@ -32,6 +32,7 @@ When working on projects/tasks, load the appropriate technology-specific best pr
 - **Database**: `.claude/best_practices/database-best-practices.md`
 - **Security**: `.claude/best_practices/security-best-practices.md`
 - **Logging & Monitoring**: `.claude/best_practices/logging-monitoring-best-practices.md`
+- **MCP Tools**: `.claude/best_practices/mcp-best-practices.md`
 
 ## JIRA Integration
 

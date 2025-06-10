@@ -22,7 +22,8 @@ This repository contains structured guidelines, best practices, and tools for ef
 │   │   ├── nodejs-best-practices.md
 │   │   ├── php-best-practices.md
 │   │   ├── python-best-practices.md
-│   │   └── security-best-practices.md
+│   │   ├── security-best-practices.md
+│   │   └── mcp-best-practices.md
 │   ├── commands/
 │   │   ├── jira.md
 │   │   ├── fix-github-issues.md
@@ -87,6 +88,7 @@ Comprehensive guides for:
 - **CMS**: ApostropheCMS
 - **Security**: OWASP compliance, authentication, encryption
 - **Monitoring**: Logging strategies, performance monitoring
+- **MCP Tools**: Model Context Protocol, version management, tool integration
 
 ### 📋 Workflow Management
 
