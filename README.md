@@ -11,19 +11,21 @@ This repository contains structured guidelines, best practices, and tools for ef
 ```
 .
 ├── .claude/
-│   ├── commands/           # Technology-specific best practices
+│   ├── best_practices/  # Technology-specific best practices
 │   │   ├── angular-best-practices.md
 │   │   ├── api-design-best-practices.md
 │   │   ├── apostrophe-best-practices.md
 │   │   ├── database-best-practices.md
 │   │   ├── docker-best-practices.md
 │   │   ├── java-best-practices.md
-│   │   ├── jira.md
 │   │   ├── logging-monitoring-best-practices.md
 │   │   ├── nodejs-best-practices.md
 │   │   ├── php-best-practices.md
 │   │   ├── python-best-practices.md
 │   │   └── security-best-practices.md
+│   ├── commands/
+│   │   ├── jira.md
+│   │   ├── fix-github-issues.md
 │   └── templates/          # Project templates
 │       ├── code-review-checklist.md
 │       ├── pull-request-template.md
