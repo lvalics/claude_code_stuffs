@@ -48,13 +48,14 @@ This repository contains structured guidelines, best practices, and tools for ef
    ```
 
 2. **Set up development environment:**
+This only applies if it is a new project and fits with your workflow.
    ```bash
    ./scripts/setup-dev-env.sh
    ```
 
 3. **Review the main guidelines:**
    - Read `CLAUDE.md` for core development principles
-   - Check relevant technology-specific guides in `.claude/commands/`
+   - Check relevant technology-specific guides in `.claude/best_practises/`
 
 ## Key Features
 
@@ -91,62 +92,49 @@ Environment-specific logging strategies:
 
 ## Usage Guide
 
+### Customizing Best Practices
+
+The best practices files in `.claude/best_practices/` provide comprehensive defaults based on industry standards. However, these files are meant to be customized to match your team's specific workflows and requirements. Feel free to edit these files to:
+- Add project-specific conventions
+- Modify guidelines to match your team's practices
+- Include company-specific requirements
+- Remove sections that don't apply to your use case
+
 ### Working on a New Task
 
-1. **Create a task branch:**
-   ```bash
-   git checkout -b TASK-123
+1. **Send to Claude a prompt like**
+   ```
+   Please retrieve the task from Jira MCP with the ID TASK-123 and proceed to create documentation for it.
    ```
 
-2. **Read task specifications:**
+2. **Create implementation:**
    ```
-   /tasks/TASK-123/TASK-123-specs.md
-   ```
-
-3. **Create implementation plan:**
-   ```
-   /tasks/TASK-123/TASK-123-IMPLEMENTATION.md
+   Create implementation from TASK-123
    ```
 
-4. **Track your changes:**
+3. **Track your changes:**
    - Claude Code automatically creates session files in `claude_code_changes/`
    - Format: `claude_changes_YYYY-MM-DD_HH-MM.txt`
 
-### Technology-Specific Development
-
-When starting work on a project, load the appropriate best practices:
-
-```bash
-# For Node.js projects
-cat .claude/commands/nodejs-best-practices.md
-
-# For API development
-cat .claude/commands/api-design-best-practices.md
-
-# For database work
-cat .claude/commands/database-best-practices.md
-```
-
-### Security Implementation
-
-1. Review security checklist:
-   ```bash
-   cat .claude/commands/security-best-practices.md
+4. **Test your code in real-world cases**
+   ```
+   Do your usual testing. Since I recommend always having a separate branch for each task, you can easily view the changes using Git Diff in any visual editor. This allows you to see what needs testing, what has been affected, and to apply your programming skills accordingly. Of course, test it and code it until it works.
    ```
 
-2. Run security audits:
-   ```bash
-   npm audit  # For Node.js projects
+5. **Linting and retest**
+   ```
+   Sometimes linting modifies files, so you will need to review the changes and retest your code.
    ```
 
-3. Implement security headers and authentication per guidelines
+6. **Commit**
+   ```
+   Commit your changes, push them, and create a pull request (PR) in Git, or merge directly into the develop/main branch (depending on your workflow). You can also request a version tag if needed. Use any Git commands you typically work with.
+   ```
 
-### Database Development
-
-1. Follow naming conventions in `.claude/commands/database-best-practices.md`
-2. Create migrations with up/down scripts
-3. Implement proper indexing and query optimization
-4. Use connection pooling and monitoring
+6. **Create Jira Comment/Change status**
+   ```
+   Ask Claude to add a comment summarizing the work you’ve done. You can also ask to log the time spent or change the task status so it moves to QA for review.
+   ```
 
 ## Best Practices Summary
 
