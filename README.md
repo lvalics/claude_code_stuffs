@@ -27,6 +27,7 @@ This repository contains structured guidelines, best practices, and tools for ef
 │   ├── commands/
 │   │   ├── jira.md
 │   │   ├── fix-github-issues.md
+│   │   ├── document.md
 │   ├── config/             # Team configurations
 │   │   ├── examples/       # Example configurations
 │   │   ├── config-schema.yaml
