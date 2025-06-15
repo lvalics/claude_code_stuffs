@@ -1,8 +1,20 @@
-#\!/bin/bash
+#!/bin/bash
 
 # Setup Claude MCP servers interactively
 echo "Claude MCP Server Installer"
 echo "Current directory: $(pwd)"
+echo ""
+
+# Store the script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# Change to parent directory (project root)
+cd "$SCRIPT_DIR/.." || {
+    echo "Error: Could not change to parent directory"
+    exit 1
+}
+
+echo "Changed to project root: $(pwd)"
 echo ""
 
 # Function to install context7
@@ -147,5 +159,11 @@ for choice in $choices; do
 done
 
 echo ""
-echo "MCP server installation complete\!"
-EOF < /dev/null
+echo "MCP server installation complete!"
+
+# Return to the script directory
+cd "$SCRIPT_DIR" || {
+    echo "Warning: Could not return to script directory"
+}
+
+echo "Returned to script directory: $(pwd)"

@@ -1,0 +1,32 @@
+# Claude Session State
+# This file tracks the current session state and is updated throughout the conversation
+
+session:
+  id: "2025-01-15_session_001"
+  health: "🟢"  # 🟢 Healthy | 🟡 Approaching | 🔴 Handover Now
+  message_count: 0
+  started_at: "2025-01-15T10:00:00Z"
+  last_updated: "2025-01-15T10:00:00Z"
+  
+mode: "BUILD"  # DEBUG | BUILD | REVIEW | LEARN | RAPID
+scope: "MEDIUM"  # MICRO(1-5) | SMALL(5-20) | MEDIUM(20-50) | LARGE(50+) | EPIC(multi-file)
+
+task:
+  jira_id: ""
+  title: ""
+  phase: "planning"  # planning | implementation | testing | review | completed
+  progress: 0
+  
+context:
+  current_file: ""
+  current_function: ""
+  branch: "main"
+  last_command: ""
+  
+todos:
+  completed: []
+  in_progress: []
+  pending: []
+  
+notes:
+  - "Session initialized"

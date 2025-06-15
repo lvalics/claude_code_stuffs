@@ -6,6 +6,16 @@ A comprehensive development framework and best practices collection for working 
 
 This repository contains structured guidelines, best practices, and tools for efficient software development with Claude Code. It provides technology-specific guidance, workflow automation, and quality assurance processes.
 
+### 🚀 New: Session Management System
+
+The framework now includes an intelligent session management system that:
+- **Prevents conversation limit issues** with health monitoring (🟢 Healthy → 🟡 Approaching → 🔴 Handover)
+- **Enables seamless handovers** between Claude sessions
+- **Tracks work context** including mode, scope, and task progress
+- **Integrates with existing workflow** for continuous development
+
+Try it: Start any conversation with `<Health-Check>` to see session status!
+
 ## Directory Structure
 
 ```
@@ -28,13 +38,17 @@ This repository contains structured guidelines, best practices, and tools for ef
 │   │   ├── jira.md
 │   │   ├── fix-github-issues.md
 │   │   ├── document.md
+│   │   └── health-check.md         # Session health monitoring
 │   ├── config/             # Team configurations
 │   │   ├── examples/       # Example configurations
 │   │   ├── config-schema.yaml
 │   │   ├── default-config.yaml
 │   │   └── load-config.sh
 │   ├── guides/             # How-to guides
-│   │   └── customization-guide.md
+│   │   ├── customization-guide.md
+│   │   └── session-management-guide.md
+│   ├── session/            # Session state management
+│   │   └── current-session.yaml
 │   └── templates/          # Project templates
 │       ├── code-review-checklist.md
 │       ├── pull-request-template.md
@@ -42,7 +56,8 @@ This repository contains structured guidelines, best practices, and tools for ef
 │       ├── custom-best-practice-template.md
 │       ├── best-practice-addendum-template.md
 │       ├── team-quick-reference.md
-│       └── migration-guide-template.md
+│       ├── migration-guide-template.md
+│       └── handover-template.md    # Session handover documentation
 ├── claude_code_changes/    # Session change tracking
 ├── scripts/                # Utility scripts
 │   ├── setup-dev-env.sh   # Development environment setup
@@ -78,6 +93,15 @@ This only applies if it is a new project and fits with your workflow.
    - Check relevant technology-specific guides in `.claude/best_practises/`
 
 ## Key Features
+
+### 🎯 Session Management System
+
+- **Health Monitoring**: Automatic tracking of conversation length with visual indicators
+- **Smart Handovers**: Generate comprehensive handover documents when approaching limits
+- **Mode Switching**: DEBUG, BUILD, REVIEW, LEARN, RAPID modes for different contexts
+- **Scope Tracking**: MICRO to EPIC classifications for work complexity
+- **Command Triggers**: `<Health-Check>`, `<Handover01>`, mode/scope commands
+- **State Persistence**: Maintains context across sessions in `.claude/session/`
 
 ### 🛠 Technology-Specific Best Practices
 
@@ -143,10 +167,42 @@ Feel free to edit these files to:
 - Include company-specific requirements
 - Remove sections that don't apply to your use case
 
+### Session Management
+
+When working with Claude Code, the session management system helps prevent conversation limit issues:
+
+1. **Start with a health check:**
+   ```
+   <Health-Check>
+   ```
+   This shows your session status and sets appropriate mode/scope.
+
+2. **Monitor session health:**
+   - 🟢 Healthy (0-30 messages): Continue normally
+   - 🟡 Approaching (31-45 messages): Plan for handover
+   - 🔴 Handover Now (46+ messages): Generate handover immediately
+
+3. **Switch modes as needed:**
+   ```
+   MODE: DEBUG      # For troubleshooting
+   MODE: BUILD      # For implementation
+   MODE: REVIEW     # For code review
+   MODE: RAPID      # For quick responses
+   ```
+
+4. **Generate handover when needed:**
+   ```
+   <Handover01>
+   ```
+   This creates a comprehensive handover document for the next session.
+
+For detailed information, see the [Session Management Guide](.claude/guides/session-management-guide.md).
+
 ### Working on a New Task
 
-1. **Send to Claude a prompt like**
+1. **Start with session initialization:**
    ```
+   <Health-Check>
    Please retrieve the task from Jira MCP with the ID TASK-123 and proceed to create documentation for it.
    ```
 
@@ -158,6 +214,7 @@ Feel free to edit these files to:
 3. **Track your changes:**
    - Claude Code automatically creates session files in `claude_code_changes/`
    - Format: `claude_changes_YYYY-MM-DD_HH-MM.txt`
+   - Session state tracked in `.claude/session/current-session.yaml`
 
 4. **Test your code in real-world cases**
    ```

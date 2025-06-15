@@ -1,5 +1,45 @@
 # Claude Code Development Guidelines
 
+## Session Management System
+
+### Health Check Protocol
+When starting ANY conversation, immediately perform a health check to establish session state:
+1. Check for existing session state in `.claude/session/current-session.yaml`
+2. Initialize or update session health tracking
+3. Set appropriate mode based on task type
+4. Track scope of work (MICRO/SMALL/MEDIUM/LARGE/EPIC)
+
+### Session Health Indicators
+- 🟢 **Healthy** (0-30 messages): Normal operation
+- 🟡 **Approaching** (31-45 messages): Plan for handover
+- 🔴 **Handover Now** (46+ messages): Immediate handover required
+
+### Command Triggers
+- `<Health-Check>` - Display current session health and metrics
+- `<Handover01>` - Generate handover document for session continuity
+- `<Session-Metrics>` - View detailed session statistics
+- `MODE: [DEBUG|BUILD|REVIEW|LEARN|RAPID]` - Switch response mode
+- `SCOPE: [MICRO|SMALL|MEDIUM|LARGE|EPIC]` - Set work complexity
+
+### Automatic Behaviors
+1. **On Session Start**: Run health check, load previous state if exists
+2. **Every 10 Messages**: Background health check with warnings
+3. **On Mode Switch**: Update session state and load mode-specific guidelines
+4. **On Health Warning**: Suggest natural breakpoints for handover
+
+### Session State Management
+Session state is stored in `.claude/session/current-session.yaml` and includes:
+- Health status and message count
+- Current mode and scope
+- Active task (JIRA ID, phase, progress)
+- Context (current file, branch, etc.)
+
+When health reaches 🟡, proactively:
+1. Complete current logical unit of work
+2. Update todo list with completed items
+3. Prepare handover documentation
+4. Save all session state for seamless resume
+
 ## Team Configuration
 
 When starting a session, check for team-specific configuration files in `.claude/config/`:
@@ -48,14 +88,26 @@ When working on projects/tasks, load the appropriate technology-specific best pr
 
 ## Implementation Process
 
-1. **Load Team Configuration**: First check `.claude/config/team-config.yaml` and `.claude/config/workflow-config.yaml` to understand team preferences. If not found, use defaults but suggest running `./scripts/customize-framework.sh`
-2. **Read Task Specifications**: Always start by reading `/tasks/{{JIRA_TASK_ID}}/{{JIRA_TASK_ID}}-specs.md`
-3. **Create Implementation Plan**: Create `/tasks/{{JIRA_TASK_ID}}/{{JIRA_TASK_ID}}-IMPLEMENTATION.md` for review and approval
-4. **Track Changes**: 
+1. **Session Initialization** (ALWAYS FIRST):
+   - Perform health check to establish session state
+   - Load or create session in `.claude/session/current-session.yaml`
+   - Set initial mode based on task type (bug fix = DEBUG, new feature = BUILD)
+   - If resuming, load handover documentation
+
+2. **Load Team Configuration**: Check `.claude/config/team-config.yaml` and `.claude/config/workflow-config.yaml` to understand team preferences. If not found, use defaults but suggest running `./scripts/customize-framework.sh`
+
+3. **Read Task Specifications**: Always start by reading `/tasks/{{JIRA_TASK_ID}}/{{JIRA_TASK_ID}}-specs.md`
+
+4. **Create Implementation Plan**: Create `/tasks/{{JIRA_TASK_ID}}/{{JIRA_TASK_ID}}-IMPLEMENTATION.md` for review and approval
+   - Include session breakpoints for LARGE/EPIC scopes
+   - Plan natural handover points between major components
+
+5. **Track Changes**: 
    - Create `claude_code_changes/` directory if it doesn't exist
    - For each session, create `claude_changes_{YYYY-MM-DD_HH-MM}.txt`
-   - Begin the file with the current Git branch name and TaskID if exist.
+   - Begin the file with the current Git branch name and TaskID if exist
    - Document all changes made during the session
+   - Update session state after significant milestones
 
 ## Test-Driven Development (TDD)
 

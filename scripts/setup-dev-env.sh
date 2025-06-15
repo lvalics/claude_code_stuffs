@@ -181,6 +181,7 @@ directories=(
     "scripts"
     ".claude/commands"
     ".claude/templates"
+    ".claude/session"
 )
 
 for dir in "${directories[@]}"; do
