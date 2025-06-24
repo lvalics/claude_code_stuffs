@@ -36,11 +36,11 @@ echo
 
 # Function to prompt for yes/no
 prompt_yes_no() {
-    local prompt="$1"
-    local response
+    prompt="$1"
     
     while true; do
-        read -p "$prompt (y/n): " response
+        printf "%s (y/n): " "$prompt"
+        read response </dev/tty
         case $response in
             [Yy]* ) return 0;;
             [Nn]* ) return 1;;
@@ -51,85 +51,44 @@ prompt_yes_no() {
 
 # Function to prompt for choice
 prompt_choice() {
-    local prompt="$1"
+    prompt="$1"
     shift
-    local options=("$@")
-    local choice
     
     echo "$prompt"
-    for i in "${!options[@]}"; do
-        echo "  $((i+1)). ${options[$i]}"
+    i=1
+    for option in "$@"; do
+        echo "  $i. $option"
+        i=$((i+1))
     done
     
     while true; do
-        read -p "Enter your choice (1-${#options[@]}): " choice
-        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#options[@]}" ]; then
-            echo "${options[$((choice-1))]}"
-            return 0
+        printf "Enter your choice (1-$((i-1))): "
+        read choice </dev/tty
+        if [ "$choice" -ge 1 ] 2>/dev/null && [ "$choice" -le $((i-1)) ] 2>/dev/null; then
+            j=1
+            for option in "$@"; do
+                if [ "$j" = "$choice" ]; then
+                    echo "$option"
+                    return 0
+                fi
+                j=$((j+1))
+            done
         else
-            echo "Invalid choice. Please enter a number between 1 and ${#options[@]}."
+            echo "Invalid choice. Please enter a number between 1 and $((i-1))."
         fi
     done
-}
-
-# Function to backup a file
-backup_file() {
-    local file="$1"
-    if [ -f "$file" ] && [ ! -f "${file}.default" ]; then
-        cp "$file" "${file}.default"
-        echo -e "${GREEN}✓ Backed up $file${NC}"
-    fi
-}
-
-# Function to add customization marker
-add_custom_marker() {
-    local file="$1"
-    local section="$2"
-    local team="$3"
-    local reason="$4"
-    
-    cat >> "$file" << EOF
-
-## $section [CUSTOMIZED: $team]
-<!-- Custom requirement: Added by customization script on $TIMESTAMP -->
-<!-- Reason: $reason -->
-EOF
-}
-
-# Function to log customization
-log_customization() {
-    local file="$1"
-    local change="$2"
-    local team="$3"
-    
-    if [ ! -f "$CUSTOMIZATION_LOG" ]; then
-        cat > "$CUSTOMIZATION_LOG" << EOF
-# Best Practices Customization Log
-
-This log tracks all customizations made to the Claude Code best practices.
-
----
-
-EOF
-    fi
-    
-    cat >> "$CUSTOMIZATION_LOG" << EOF
-## $TIMESTAMP - $file
-- Modified by: $team (via customization script)
-- Changes: $change
-- Script version: 1.0
-
-EOF
 }
 
 # Gather team information
 echo -e "${YELLOW}Let's start by gathering some information about your team:${NC}"
 echo
 
-read -p "Enter your team/project name: " TEAM_NAME
+printf "Enter your team/project name: "
+read TEAM_NAME </dev/tty
 while [ -z "$TEAM_NAME" ]; do
     echo -e "${RED}Team name cannot be empty${NC}"
-    read -p "Enter your team/project name: " TEAM_NAME
+    printf "Enter your team/project name: "
+    read TEAM_NAME </dev/tty
 done
 
 TEAM_SIZE=$(prompt_choice "What is your team size?" "Solo developer" "Small team (2-5)" "Medium team (6-15)" "Large team (16+)")
@@ -163,10 +122,14 @@ echo -e "${GREEN}✓ Team configuration created${NC}"
 # Technology stack customization
 echo -e "\n${YELLOW}Which technologies does your team primarily use?${NC}"
 
-TECHNOLOGIES=()
+TECHNOLOGIES=""
 for tech in "Node.js" "Python" "PHP" "Java" "Angular" "React" "Vue" "Docker" "Kubernetes"; do
     if prompt_yes_no "Do you use $tech?"; then
-        TECHNOLOGIES+=("$tech")
+        if [ -z "$TECHNOLOGIES" ]; then
+            TECHNOLOGIES="$tech"
+        else
+            TECHNOLOGIES="$TECHNOLOGIES,$tech"
+        fi
     fi
 done
 
@@ -176,9 +139,12 @@ cat >> "$CONFIG_DIR/team-config.yaml" << EOF
 technologies:
 EOF
 
-for tech in "${TECHNOLOGIES[@]}"; do
-    echo "  - $tech" >> "$CONFIG_DIR/team-config.yaml"
-done
+# Convert comma-separated to list
+if [ -n "$TECHNOLOGIES" ]; then
+    echo "$TECHNOLOGIES" | tr ',' '\n' | while IFS= read -r tech; do
+        echo "  - $tech" >> "$CONFIG_DIR/team-config.yaml"
+    done
+fi
 
 # Coding standards customization
 echo -e "\n${YELLOW}Let's customize your coding standards:${NC}"
@@ -187,79 +153,20 @@ echo -e "\n${YELLOW}Let's customize your coding standards:${NC}"
 INDENT_STYLE=$(prompt_choice "Preferred indentation style?" "2 spaces" "4 spaces" "Tabs")
 
 # Line length
-read -p "Maximum line length (default 80, enter for default): " MAX_LINE_LENGTH
+printf "Maximum line length (default 80, enter for default): "
+read MAX_LINE_LENGTH </dev/tty
 MAX_LINE_LENGTH=${MAX_LINE_LENGTH:-80}
 
 # Naming conventions
 NAMING_CONVENTION=$(prompt_choice "Variable naming convention?" "camelCase" "snake_case" "PascalCase" "kebab-case")
-
-# Update Node.js best practices if using Node.js
-if [[ " ${TECHNOLOGIES[@]} " =~ " Node.js " ]]; then
-    echo -e "\n${YELLOW}Customizing Node.js best practices...${NC}"
-    
-    NODE_FILE="$BEST_PRACTICES_DIR/nodejs-best-practices.md"
-    if [ -f "$NODE_FILE" ]; then
-        backup_file "$NODE_FILE"
-        
-        # Add customizations
-        add_custom_marker "$NODE_FILE" "Code Style" "$TEAM_NAME" "Team preferences from customization script"
-        
-        cat >> "$NODE_FILE" << EOF
-- Indentation: $INDENT_STYLE
-- Maximum line length: $MAX_LINE_LENGTH characters
-- Variable naming: $NAMING_CONVENTION
-EOF
-        
-        log_customization "nodejs-best-practices.md" "Code style: $INDENT_STYLE, max line $MAX_LINE_LENGTH, naming $NAMING_CONVENTION" "$TEAM_NAME"
-        
-        echo -e "${GREEN}✓ Node.js best practices customized${NC}"
-    fi
-fi
-
-# Security customizations
-echo -e "\n${YELLOW}Security requirements:${NC}"
-
-if [[ "$INDUSTRY" == "Finance/FinTech" ]] || [[ "$INDUSTRY" == "Healthcare" ]]; then
-    echo -e "${BLUE}Detected regulated industry. Adding compliance requirements...${NC}"
-    
-    SECURITY_FILE="$BEST_PRACTICES_DIR/security-best-practices.md"
-    if [ -f "$SECURITY_FILE" ]; then
-        backup_file "$SECURITY_FILE"
-        
-        if [[ "$INDUSTRY" == "Healthcare" ]]; then
-            add_custom_marker "$SECURITY_FILE" "HIPAA Compliance" "$TEAM_NAME" "Healthcare industry requirements"
-            cat >> "$SECURITY_FILE" << EOF
-- All PHI must be encrypted at rest (AES-256)
-- Implement audit logging for all data access
-- Session timeout: 15 minutes of inactivity
-- Multi-factor authentication required
-- Regular security training for all developers
-EOF
-            log_customization "security-best-practices.md" "Added HIPAA compliance requirements" "$TEAM_NAME"
-        fi
-        
-        if [[ "$INDUSTRY" == "Finance/FinTech" ]]; then
-            add_custom_marker "$SECURITY_FILE" "Financial Compliance" "$TEAM_NAME" "Financial industry requirements"
-            cat >> "$SECURITY_FILE" << EOF
-- PCI DSS compliance for payment data
-- Encryption of all financial data
-- Tokenization for sensitive card data
-- Regular penetration testing
-- Incident response plan required
-EOF
-            log_customization "security-best-practices.md" "Added financial compliance requirements" "$TEAM_NAME"
-        fi
-        
-        echo -e "${GREEN}✓ Security best practices customized${NC}"
-    fi
-fi
 
 # Testing preferences
 echo -e "\n${YELLOW}Testing preferences:${NC}"
 
 TEST_FRAMEWORK=$(prompt_choice "Preferred testing approach?" "TDD (Test-Driven Development)" "BDD (Behavior-Driven Development)" "Traditional (tests after code)" "Minimal testing")
 
-read -p "Minimum code coverage requirement (%, enter for 80): " CODE_COVERAGE
+printf "Minimum code coverage requirement (%, enter for 80): "
+read CODE_COVERAGE </dev/tty
 CODE_COVERAGE=${CODE_COVERAGE:-80}
 
 # Update test configuration
@@ -309,21 +216,15 @@ echo
 echo -e "${GREEN}✓ Team configuration created${NC}"
 echo -e "${GREEN}✓ Technology stack configured${NC}"
 echo -e "${GREEN}✓ Coding standards customized${NC}"
-if [[ "$INDUSTRY" == "Finance/FinTech" ]] || [[ "$INDUSTRY" == "Healthcare" ]]; then
-    echo -e "${GREEN}✓ Industry-specific security requirements added${NC}"
-fi
 echo -e "${GREEN}✓ Testing preferences set${NC}"
 echo -e "${GREEN}✓ Workflow configuration created${NC}"
 echo
 echo -e "Configuration files created in: ${BLUE}$CONFIG_DIR/${NC}"
-echo -e "Customization log: ${BLUE}$CUSTOMIZATION_LOG${NC}"
-echo -e "Original files backed up with ${BLUE}.default${NC} extension"
 echo
 echo -e "${YELLOW}Next steps:${NC}"
-echo "1. Review the customizations in the modified files"
+echo "1. Review the customizations in the configuration files"
 echo "2. Commit these changes to your repository"
 echo "3. Share with your team for feedback"
-echo "4. See ${BLUE}$CLAUDE_DIR/guides/customization-guide.md${NC} for more details"
 echo
 echo -e "${GREEN}Customization complete!${NC}"
 
@@ -339,7 +240,7 @@ Generated on: $TIMESTAMP
 - **Industry**: $INDUSTRY
 
 ## Technologies
-$(printf '%s\n' "${TECHNOLOGIES[@]}" | sed 's/^/- /')
+$(echo "$TECHNOLOGIES" | tr ',' '\n' | sed 's/^/- /' | sed '/^- $/d')
 
 ## Coding Standards
 - **Indentation**: $INDENT_STYLE
@@ -354,13 +255,47 @@ $(printf '%s\n' "${TECHNOLOGIES[@]}" | sed 's/^/- /')
 - **Branching Strategy**: $BRANCHING
 - **PR Reviews**: $PR_REVIEWS
 
-## Files Modified
-- See $CUSTOMIZATION_LOG for details
-
 ## Next Steps
 1. Review all customizations
 2. Test with your team
 3. Iterate as needed
 EOF
+
+echo
+echo -e "${BLUE}╔══════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║                    Setup Development Environment         ║${NC}"
+echo -e "${BLUE}╚══════════════════════════════════════════════════════════╝${NC}"
+echo
+echo -e "${YELLOW}Would you like to run the development environment setup now?${NC}"
+echo
+echo -e "${GREEN}Why run setup-dev-env.sh?${NC}"
+echo "• Automatically installs only the technologies you selected"
+echo "• Configures development tools (linters, formatters, etc.)"
+echo "• Sets up project structure and Git hooks"
+echo "• Creates VS Code settings optimized for your tech stack"
+echo "• Generates README.md with your specific technologies"
+echo "• Saves time by avoiding manual installation of each tool"
+echo
+printf "Run setup-dev-env.sh now? (y/n): "
+read -r SETUP_RESPONSE
+
+if [ "$SETUP_RESPONSE" = "y" ] || [ "$SETUP_RESPONSE" = "Y" ]; then
+    echo
+    echo -e "${GREEN}Running development environment setup...${NC}"
+    echo
+    if [ -f "./scripts/setup-dev-env.sh" ]; then
+        chmod +x "./scripts/setup-dev-env.sh"
+        ./scripts/setup-dev-env.sh
+    else
+        echo -e "${RED}Error: setup-dev-env.sh not found in ./scripts/${NC}"
+        echo "Please run it manually when available."
+    fi
+else
+    echo
+    echo -e "${YELLOW}You can run the setup later with:${NC}"
+    echo "./scripts/setup-dev-env.sh"
+    echo
+    echo -e "${GREEN}This will install and configure only the technologies you selected.${NC}"
+fi
 
 echo -e "\nSummary saved to: ${BLUE}$CONFIG_DIR/customization-summary.md${NC}"

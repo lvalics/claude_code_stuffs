@@ -97,6 +97,13 @@ install_cloudflare_bindings() {
     claude mcp add cloudflare-bindings -- npx mcp-remote https://bindings.mcp.cloudflare.com/sse
 }
 
+# Function to install snap-happy
+install_snap_happy() {
+    echo "Installing snap-happy screenshot tool..."
+    claude mcp add snap-happy npx @mariozechner/snap-happy
+    echo "snap-happy installed globally!"
+}
+
 # Interactive menu
 echo "Select MCP servers to install (separate multiple with spaces):"
 echo "1) context7"
@@ -110,6 +117,7 @@ echo "8) playwright"
 echo "9) github (requires personal access token)"
 echo "10) cloudflare-observability"
 echo "11) cloudflare-bindings"
+echo "12) snap-happy (screenshot tool)"
 echo ""
 echo -n "Enter your choices (e.g., 1 2 3): "
 read choices
@@ -151,6 +159,9 @@ for choice in $choices; do
             ;;
         11)
             install_cloudflare_bindings
+            ;;
+        12)
+            install_snap_happy
             ;;
         *)
             echo "Invalid choice: $choice"
