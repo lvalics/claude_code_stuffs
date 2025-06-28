@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process');
+const { execSync, spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
@@ -29,17 +29,50 @@ const tempFrameworkDir = path.join(projectPath, 'temp_framework_setup');
 
 try {
   console.log('Cloning the setup tool...');
-  execSync(`git clone --depth 1 ${frameworkRepo} "${tempFrameworkDir}"`, { stdio: 'inherit' });
+  execSync(`git clone --depth 1 ${frameworkRepo} "${tempFrameworkDir}"`, { 
+    stdio: 'inherit'
+  });
   
   const initScriptPath = path.join(tempFrameworkDir, 'scripts', 'init-project.sh');
   
-  // Make the script executable and run it within the new project directory
-  execSync(`chmod +x "${initScriptPath}" && cd "${projectPath}" && "${initScriptPath}"`, { stdio: 'inherit' });
+  // Make the script executable
+  execSync(`chmod +x "${initScriptPath}"`, { stdio: 'inherit' });
+  
+  // Run the init script using spawn for better interactive support
+  const initProcess = spawn('bash', [initScriptPath], {
+    cwd: projectPath,
+    stdio: 'inherit',
+    shell: false
+  });
+  
+  initProcess.on('close', (code) => {
+    // Clean up the temporary setup directory
+    if (fs.existsSync(tempFrameworkDir)) {
+      fs.rmSync(tempFrameworkDir, { recursive: true, force: true });
+    }
+    
+    if (code !== 0) {
+      console.error(`\nSetup process exited with code ${code}`);
+      process.exit(code);
+    }
+  });
+  
+  initProcess.on('error', (error) => {
+    console.error('Failed to create the project.');
+    console.error(error);
+    
+    // Clean up the temporary setup directory
+    if (fs.existsSync(tempFrameworkDir)) {
+      fs.rmSync(tempFrameworkDir, { recursive: true, force: true });
+    }
+    
+    process.exit(1);
+  });
 
 } catch (error) {
   console.error('Failed to create the project.');
   console.error(error);
-} finally {
+  
   // Clean up the temporary setup directory
   if (fs.existsSync(tempFrameworkDir)) {
     fs.rmSync(tempFrameworkDir, { recursive: true, force: true });
