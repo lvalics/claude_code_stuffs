@@ -1,6 +1,6 @@
 {
   "name": "create-jezweb-ai-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI tool to scaffold a new full-stack AI application using the Jezweb boilerplate and framework.",
   "main": "index.js",
   "bin": {
