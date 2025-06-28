@@ -41,8 +41,13 @@ try {
   // Run the init script using spawn for better interactive support
   const initProcess = spawn('bash', [initScriptPath], {
     cwd: projectPath,
-    stdio: 'inherit',
-    shell: false
+    stdio: ['inherit', 'inherit', 'inherit'],
+    shell: true,
+    env: {
+      ...process.env,
+      FORCE_COLOR: '1',
+      NPM_CONFIG_COLOR: 'always'
+    }
   });
   
   initProcess.on('close', (code) => {
