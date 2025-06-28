@@ -34,6 +34,8 @@ Try it: Start any conversation with `<Health-Check>` to see session status!
 │   │   ├── python-best-practices.md
 │   │   ├── security-best-practices.md
 │   │   └── mcp-best-practices.md
+│   │   └── vuejs-best-practices.md
+│   │   └── full-stack-integration-best-practices.md
 │   ├── commands/
 │   │   ├── jira.md
 │   │   ├── fix-github-issues.md
