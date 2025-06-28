@@ -1,0 +1,26 @@
+{
+  "name": "create-jezweb-ai-app",
+  "version": "1.0.0",
+  "description": "A CLI tool to scaffold a new full-stack AI application using the Jezweb boilerplate and framework.",
+  "main": "index.js",
+  "bin": {
+    "create-jezweb-ai-app": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jezweb/claude-code-framework.git"
+  },
+  "keywords": [
+    "cli",
+    "scaffolding",
+    "boilerplate",
+    "ai",
+    "fastapi",
+    "vue"
+  ],
+  "author": "Jezweb",
+  "license": "MIT"
+}
