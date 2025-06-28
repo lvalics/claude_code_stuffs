@@ -40,7 +40,7 @@ prompt_yes_no() {
     
     while true; do
         printf "%s (y/n): " "$prompt"
-        read response </dev/tty
+        read response
         case $response in
             [Yy]* ) return 0;;
             [Nn]* ) return 1;;
@@ -63,7 +63,7 @@ prompt_choice() {
     
     while true; do
         printf "Enter your choice (1-$((i-1))): "
-        read choice </dev/tty
+        read choice
         if [ "$choice" -ge 1 ] 2>/dev/null && [ "$choice" -le $((i-1)) ] 2>/dev/null; then
             j=1
             for option in "$@"; do
@@ -84,11 +84,11 @@ echo -e "${YELLOW}Let's start by gathering some information about your team:${NC
 echo
 
 printf "Enter your team/project name: "
-read TEAM_NAME </dev/tty
+read TEAM_NAME
 while [ -z "$TEAM_NAME" ]; do
     echo -e "${RED}Team name cannot be empty${NC}"
     printf "Enter your team/project name: "
-    read TEAM_NAME </dev/tty
+    read TEAM_NAME
 done
 
 TEAM_SIZE=$(prompt_choice "What is your team size?" "Solo developer" "Small team (2-5)" "Medium team (6-15)" "Large team (16+)")
