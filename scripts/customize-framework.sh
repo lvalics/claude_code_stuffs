@@ -26,6 +26,14 @@ if [ ! -d "$CLAUDE_DIR" ]; then
     exit 1
 fi
 
+# Check if we're in an interactive terminal
+if [ ! -t 0 ]; then
+    echo -e "${RED}Error: This script requires an interactive terminal${NC}"
+    echo "stdin is not available. This might happen when running through certain tools."
+    echo "Please ensure you're running this in a proper terminal environment."
+    exit 1
+fi
+
 # Create config directory if it doesn't exist
 mkdir -p "$CONFIG_DIR"
 

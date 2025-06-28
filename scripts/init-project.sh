@@ -2,6 +2,7 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 
 # --- Color Codes ---
+RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
@@ -33,8 +34,23 @@ echo -e "${GREEN}✔ Project files and framework are in place.${NC}"
 
 # --- Run Customization and Setup ---
 echo -e "${YELLOW}Running framework customization...${NC}"
-chmod +x ./scripts/customize-framework.sh
-./scripts/customize-framework.sh
+
+# Check if Node.js version exists and use it preferentially
+if [ -f "./scripts/customize-framework.js" ]; then
+    chmod +x ./scripts/customize-framework.js
+    # Install dependencies if package.json exists
+    if [ -f "./package.json" ]; then
+        echo -e "${YELLOW}Installing dependencies...${NC}"
+        npm install --silent
+    fi
+    node ./scripts/customize-framework.js
+elif [ -f "./scripts/customize-framework.sh" ]; then
+    chmod +x ./scripts/customize-framework.sh
+    ./scripts/customize-framework.sh
+else
+    echo -e "${RED}Error: No customization script found!${NC}"
+    exit 1
+fi
 
 echo -e "${YELLOW}Running development environment setup...${NC}"
 chmod +x ./scripts/setup-dev-env.sh

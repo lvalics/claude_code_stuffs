@@ -22,5 +22,8 @@
     "vue"
   ],
   "author": "Jezweb",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/prompts": "^5.0.0"
+  }
 }
