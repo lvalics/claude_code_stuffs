@@ -1,523 +1,337 @@
-# Python Development Best Practices
+# Python Backend Best Practices (FastAPI Stack)
 
-## Project Setup
+This guide outlines best practices for Python development, specifically tailored for the Jezweb recommended backend stack: **FastAPI, SQLModel, and LanceDB**.
+
+## 1. Project Setup
 
 ### Virtual Environment
+Always work inside a virtual environment to manage project-specific dependencies.
+
 ```bash
-# Create virtual environment
-python -m venv venv
-# or
+# Create a virtual environment in a 'venv' directory
 python3 -m venv venv
 
-# Activate virtual environment
-# On Windows
-venv\Scripts\activate
-# On macOS/Linux
+# Activate the virtual environment
+# On macOS/Linux:
 source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
 
-# Deactivate when done
+# To deactivate when done
 deactivate
 ```
 
-### Project Initialization
+### Dependency Management with `pip-tools`
+Use `pip-tools` to manage dependencies via `requirements.in` files for reproducible builds.
+
 ```bash
-# Create project structure
-mkdir project-name
-cd project-name
-git init
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+# Install pip-tools
+pip install pip-tools
 
-# Create requirements files
-touch requirements.txt
-touch requirements-dev.txt
-touch .gitignore
-touch README.md
-```
+# Create requirements.in for production dependencies
+# Example content:
+# fastapi
+# uvicorn[standard]
+# sqlmodel
+# lancedb
+# python-dotenv
 
-### Essential Configuration Files
+# Create requirements-dev.in for development dependencies
+# Example content:
+# -r requirements.in
+# pytest
+# pytest-cov
+# black
+# ruff
 
-#### .gitignore
-```
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# Compile requirements.in to requirements.txt
+pip-compile requirements.in
 
-# Virtual Environment
-venv/
-env/
-ENV/
+# Compile requirements-dev.in to requirements-dev.txt
+pip-compile requirements-dev.in
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-.hypothesis/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Environment variables
-.env
-.env.local
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-```
-
-#### pyproject.toml
-```toml
-[tool.black]
-line-length = 88
-target-version = ['py38']
-
-[tool.isort]
-profile = "black"
-line_length = 88
-
-[tool.pytest.ini_options]
-minversion = "6.0"
-addopts = "-ra -q --strict-markers"
-testpaths = ["tests"]
-
-[tool.mypy]
-python_version = "3.8"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-```
-
-#### setup.py (for packages)
-```python
-from setuptools import setup, find_packages
-
-setup(
-    name="project-name",
-    version="0.1.0",
-    author="Your Name",
-    author_email="your.email@example.com",
-    description="A short description",
-    long_description=open("README.md").read(),
-    long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/project-name",
-    packages=find_packages(exclude=["tests", "tests.*"]),
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-    python_requires=">=3.8",
-    install_requires=[
-        # List your dependencies here
-    ],
-)
-```
-
-## Common Commands
-
-### Package Management
-```bash
-# Install packages
-pip install package-name
-pip install -r requirements.txt
+# Install all dependencies
 pip install -r requirements-dev.txt
-
-# Save dependencies
-pip freeze > requirements.txt
-
-# Upgrade pip
-pip install --upgrade pip
-
-# List installed packages
-pip list
-
-# Show package info
-pip show package-name
-
-# Uninstall package
-pip uninstall package-name
 ```
 
-### Code Quality
-```bash
-# Format code with Black
-black .
+## 2. Project Structure for FastAPI
 
-# Sort imports with isort
-isort .
+A well-organized structure is crucial for scalability.
 
-# Lint with flake8
-flake8 .
-
-# Type checking with mypy
-mypy .
-
-# All-in-one with pre-commit
-pre-commit run --all-files
-```
-
-### Testing
-```bash
-# Run tests with pytest
-pytest
-
-# Run with coverage
-pytest --cov=src tests/
-
-# Run specific test file
-pytest tests/test_module.py
-
-# Run tests matching pattern
-pytest -k "test_pattern"
-
-# Verbose output
-pytest -v
-
-# Show print statements
-pytest -s
-```
-
-## Project Structure
 ```
 project-root/
-├── src/
-│   └── package_name/
-│       ├── __init__.py
-│       ├── main.py
-│       ├── config.py
-│       ├── models/
-│       │   └── __init__.py
-│       ├── services/
-│       │   └── __init__.py
-│       ├── utils/
-│       │   └── __init__.py
-│       └── api/
-│           └── __init__.py
-├── tests/
+├── app/
 │   ├── __init__.py
-│   ├── conftest.py
-│   ├── unit/
-│   │   └── __init__.py
-│   ├── integration/
-│   │   └── __init__.py
-│   └── fixtures/
-├── docs/
-├── scripts/
-├── requirements.txt
-├── requirements-dev.txt
-├── setup.py
-├── pyproject.toml
+│   ├── main.py             # FastAPI app instance and startup events
+│   ├── api/                # API endpoint definitions (routers)
+│   │   ├── __init__.py
+│   │   └── v1/
+│   │       ├── __init__.py
+│   │       ├── endpoints/
+│   │       │   ├── __init__.py
+│   │       │   └── items.py
+│   │       └── router.py   # Main router for v1
+│   ├── core/               # Core logic, config, and settings
+│   │   ├── __init__.py
+│   │   └── config.py
+│   ├── crud/               # Reusable CRUD operations
+│   │   ├── __init__.py
+│   │   └── crud_item.py
+│   ├── db/                 # Database session management
+│   │   ├── __init__.py
+│   │   └── session.py
+│   ├── models/             # SQLModel and Pydantic models
+│   │   ├── __init__.py
+│   │   └── item.py
+│   └── services/           # Business logic services
+│       ├── __init__.py
+│       └── search_service.py
+├── tests/                  # Pytest tests
+│   ├── __init__.py
+│   └── test_items.py
+├── .env                    # Environment variables (DO NOT COMMIT)
 ├── .gitignore
-├── .env.example
-├── README.md
-├── LICENSE
-└── Makefile
+├── pyproject.toml          # Project metadata and tool configuration
+├── requirements.in
+└── requirements-dev.in
 ```
 
-## Dependency Management
+## 3. FastAPI Best Practices
 
-### Requirements Files
-```bash
-# requirements.txt - Production dependencies
-flask==2.3.0
-sqlalchemy==2.0.0
-python-dotenv==1.0.0
+FastAPI is the core of our backend, serving as the API layer.
 
-# requirements-dev.txt - Development dependencies
--r requirements.txt
-pytest==7.4.0
-pytest-cov==4.1.0
-black==23.7.0
-flake8==6.1.0
-mypy==1.5.0
-pre-commit==3.3.3
-```
-
-### Using Poetry (Alternative)
-```bash
-# Install Poetry
-curl -sSL https://install.python-poetry.org | python3 -
-
-# Initialize project
-poetry new project-name
-# or in existing project
-poetry init
-
-# Add dependencies
-poetry add flask sqlalchemy
-
-# Add dev dependencies
-poetry add --group dev pytest black flake8
-
-# Install dependencies
-poetry install
-
-# Run commands
-poetry run python main.py
-poetry run pytest
-```
-
-## Environment Variables
-
-### Using python-dotenv
-```python
-# .env file
-DEBUG=True
-DATABASE_URL=postgresql://user:pass@localhost/dbname
-SECRET_KEY=your-secret-key
-API_KEY=your-api-key
-
-# Load in Python
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-DATABASE_URL = os.getenv('DATABASE_URL')
-SECRET_KEY = os.getenv('SECRET_KEY')
-```
-
-## Error Handling
-
-### Exception Handling Best Practices
-```python
-import logging
-
-logger = logging.getLogger(__name__)
-
-class CustomError(Exception):
-    """Base exception for this module"""
-    pass
-
-class ValidationError(CustomError):
-    """Raised when validation fails"""
-    pass
-
-def risky_operation():
-    try:
-        # Risky code
-        result = perform_operation()
-    except SpecificError as e:
-        logger.error(f"Specific error occurred: {e}")
-        raise CustomError(f"Operation failed: {e}") from e
-    except Exception as e:
-        logger.exception("Unexpected error occurred")
-        raise
-    else:
-        # Executes if no exception
-        logger.info("Operation successful")
-    finally:
-        # Always executes
-        cleanup()
-    
-    return result
-```
-
-## Testing Best Practices
-
-### Pytest Configuration
-```python
-# conftest.py
-import pytest
-from your_app import create_app, db
-
-@pytest.fixture
-def app():
-    app = create_app('testing')
-    with app.app_context():
-        db.create_all()
-        yield app
-        db.drop_all()
-
-@pytest.fixture
-def client(app):
-    return app.test_client()
-
-# Example test
-def test_example(client):
-    response = client.get('/api/endpoint')
-    assert response.status_code == 200
-```
-
-### Test Structure
-```python
-# tests/test_module.py
-import pytest
-from src.module import function_to_test
-
-class TestClassName:
-    def test_happy_path(self):
-        result = function_to_test(valid_input)
-        assert result == expected_output
-    
-    def test_edge_case(self):
-        with pytest.raises(ValueError):
-            function_to_test(invalid_input)
-    
-    @pytest.mark.parametrize("input,expected", [
-        (1, 2),
-        (2, 4),
-        (3, 6),
-    ])
-    def test_multiple_cases(self, input, expected):
-        assert function_to_test(input) == expected
-```
-
-## Logging Configuration
+### Main Application (`app/main.py`)
+Keep the main file clean. Its primary role is to create the FastAPI instance and include routers.
 
 ```python
-import logging
-import logging.config
+from fastapi import FastAPI
+from app.api.v1.router import api_router
+from app.db.session import create_db_and_tables
 
-LOGGING_CONFIG = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'default': {
-            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        },
-        'detailed': {
-            'format': '%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'level': 'INFO',
-            'formatter': 'default',
-            'stream': 'ext://sys.stdout',
-        },
-        'file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'level': 'DEBUG',
-            'formatter': 'detailed',
-            'filename': 'app.log',
-            'maxBytes': 10485760,  # 10MB
-            'backupCount': 5,
-        },
-    },
-    'root': {
-        'level': 'DEBUG',
-        'handlers': ['console', 'file'],
-    },
-}
+app = FastAPI(title="Jezweb AI App")
 
-logging.config.dictConfig(LOGGING_CONFIG)
-logger = logging.getLogger(__name__)
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
+
+app.include_router(api_router, prefix="/api/v1")
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 ```
 
-## Performance Optimization
-
-### Profiling
-```bash
-# Profile script
-python -m cProfile -s cumulative script.py
-
-# Memory profiling
-pip install memory-profiler
-python -m memory_profiler script.py
-
-# Line profiling
-pip install line_profiler
-kernprof -l -v script.py
-```
-
-### Best Practices
-- Use generators for large datasets
-- Implement caching where appropriate
-- Use `__slots__` for classes with fixed attributes
-- Profile before optimizing
-- Use appropriate data structures
-- Consider using `numba` or `cython` for performance-critical code
-
-## Type Hints
+### Routing (`app/api/v1/`)
+Use `APIRouter` to structure your endpoints. This keeps your API modular.
 
 ```python
-from typing import List, Dict, Optional, Union, Tuple, Any
-from dataclasses import dataclass
+# app/api/v1/endpoints/items.py
+from fastapi import APIRouter, Depends
+from sqlmodel import Session
+from app.db.session import get_session
+from app.models.item import Item, ItemCreate
+from app.crud import crud_item
 
-@dataclass
-class User:
-    id: int
+router = APIRouter()
+
+@router.post("/", response_model=Item)
+def create_item(*, session: Session = Depends(get_session), item_in: ItemCreate):
+    item = crud_item.create(db=session, obj_in=item_in)
+    return item
+```
+
+### Dependency Injection
+Use `Depends` for managing dependencies like database sessions. This makes testing and swapping components easy.
+
+```python
+# app/db/session.py
+from sqlmodel import create_engine, Session, SQLModel
+
+DATABASE_URL = "sqlite:///database.db"
+engine = create_engine(DATABASE_URL, echo=True)
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+```
+
+### Pydantic Models for Validation
+Define separate Pydantic models for creation, updates, and reading data. This provides strong validation and clear API contracts.
+
+```python
+# app/models/item.py
+from typing import Optional
+from sqlmodel import Field, SQLModel
+
+class ItemBase(SQLModel):
     name: str
-    email: str
-    age: Optional[int] = None
+    description: Optional[str] = None
 
-def process_users(users: List[User]) -> Dict[str, Any]:
-    """Process a list of users and return statistics."""
-    result: Dict[str, Any] = {
-        'total': len(users),
-        'with_age': sum(1 for u in users if u.age is not None)
-    }
-    return result
+class Item(ItemBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-def find_user(user_id: int) -> Optional[User]:
-    """Find a user by ID, return None if not found."""
-    # Implementation here
-    pass
+class ItemCreate(ItemBase):
+    pass # All fields from ItemBase are required
+
+class ItemUpdate(SQLModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
 ```
 
-## Common Libraries
+## 4. SQLModel for Structured Data
 
-### Web Frameworks
-- **Flask**: Lightweight and flexible
-- **Django**: Batteries-included
-- **FastAPI**: Modern, fast, with automatic API docs
-- **Pyramid**: Flexible and scalable
+SQLModel combines SQLAlchemy and Pydantic, reducing code duplication.
 
-### Data Science
-- **NumPy**: Numerical computing
-- **Pandas**: Data manipulation
-- **Matplotlib/Seaborn**: Visualization
-- **Scikit-learn**: Machine learning
+### Defining Models
+A single class defines both the database table and the API data shape.
 
-### Database
-- **SQLAlchemy**: SQL toolkit and ORM
-- **Psycopg2**: PostgreSQL adapter
-- **PyMongo**: MongoDB driver
-- **Redis-py**: Redis client
+```python
+# app/models/item.py
+from typing import Optional
+from sqlmodel import Field, SQLModel
 
-### Testing
-- **Pytest**: Testing framework
-- **Unittest**: Built-in testing
-- **Tox**: Testing across environments
-- **Coverage.py**: Code coverage
+class Item(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
+    description: Optional[str] = None
+```
 
-### Utilities
-- **Requests**: HTTP library
-- **Click**: CLI creation
-- **Celery**: Distributed task queue
-- **Pydantic**: Data validation
+### Reusable CRUD Logic
+Create a generic CRUD utility to handle common database operations.
+
+```python
+# app/crud/base.py
+from typing import Any, Generic, Type, TypeVar
+from sqlmodel import SQLModel, Session
+
+ModelType = TypeVar("ModelType", bound=SQLModel)
+CreateSchemaType = TypeVar("CreateSchemaType", bound=SQLModel)
+
+class CRUDBase(Generic[ModelType, CreateSchemaType]):
+    def __init__(self, model: Type[ModelType]):
+        self.model = model
+
+    def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
+        db_obj = self.model.from_orm(obj_in)
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
+# app/crud/crud_item.py
+from app.crud.base import CRUDBase
+from app.models.item import Item, ItemCreate
+
+item = CRUDBase[Item, ItemCreate](Item)
+```
+
+## 5. LanceDB for Vector Data
+
+LanceDB is our serverless vector store for AI-powered features.
+
+### Setup and Integration
+Integrate LanceDB within a dedicated service.
+
+```python
+# app/services/search_service.py
+import lancedb
+from sentence_transformers import SentenceTransformer # Example embedding model
+
+class SearchService:
+    def __init__(self, uri: str = "data/lancedb"):
+        self.db = lancedb.connect(uri)
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+        self.table = self._init_table()
+
+    def _init_table(self):
+        try:
+            table = self.db.open_table("items")
+        except FileNotFoundError:
+            # Schema: vector and the ID of the structured data item
+            schema = {
+                "vector": self.model.encode("").tolist(),
+                "item_id": 0,
+                "text": ""
+            }
+            table = self.db.create_table("items", schema=schema)
+        return table
+
+    def add_item(self, item_id: int, text: str):
+        vector = self.model.encode(text).tolist()
+        self.table.add([{"vector": vector, "item_id": item_id, "text": text}])
+
+    def search(self, query: str, limit: int = 5) -> list[int]:
+        query_vector = self.model.encode(query).tolist()
+        results = self.table.search(query_vector).limit(limit).to_df()
+        return results['item_id'].tolist()
+
+# Singleton instance
+search_service = SearchService()
+```
+
+### Using the Service in an Endpoint
+Inject the service into your API endpoints to add or search for items.
+
+```python
+# app/api/v1/endpoints/items.py
+# ... (other imports)
+from app.services.search_service import search_service
+
+@router.post("/{item_id}/embed")
+def embed_item(item_id: int, session: Session = Depends(get_session)):
+    item = session.get(Item, item_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    # Use both name and description for embedding
+    text_to_embed = f"{item.name}: {item.description}"
+    search_service.add_item(item_id=item.id, text=text_to_embed)
+    return {"message": "Item embedded successfully"}
+
+@router.get("/search/")
+def search_items(q: str):
+    item_ids = search_service.search(query=q)
+    return {"item_ids": item_ids}
+```
+
+## 6. Code Quality and Tooling
+
+### Formatting and Linting
+Use `black` for uncompromising code formatting and `ruff` for high-performance linting. Configure them in `pyproject.toml`.
+
+```toml
+# pyproject.toml
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I"] # Standard flake8 checks + isort
+```
+
+### Common Commands
+```bash
+# Format code
+black app/ tests/
+
+# Lint and auto-fix code
+ruff --fix app/ tests/
+
+# Run tests with coverage
+pytest --cov=app
+```
+
+## 7. Type Hints
+Use Python's type hints extensively. FastAPI leverages them for validation and documentation. `mypy` can be used for static type checking.
+
+```python
+from typing import List, Optional
+from sqlmodel import Session
+
+def get_items(db: Session, skip: int = 0, limit: int = 100) -> List[Item]:
+    # Function implementation
+    pass
+```
