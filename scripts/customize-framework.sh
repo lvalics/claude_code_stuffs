@@ -154,7 +154,7 @@ INDENT_STYLE=$(prompt_choice "Preferred indentation style?" "2 spaces" "4 spaces
 
 # Line length
 printf "Maximum line length (default 80, enter for default): "
-read MAX_LINE_LENGTH </dev/tty
+read MAX_LINE_LENGTH
 MAX_LINE_LENGTH=${MAX_LINE_LENGTH:-80}
 
 # Naming conventions
@@ -166,7 +166,7 @@ echo -e "\n${YELLOW}Testing preferences:${NC}"
 TEST_FRAMEWORK=$(prompt_choice "Preferred testing approach?" "TDD (Test-Driven Development)" "BDD (Behavior-Driven Development)" "Traditional (tests after code)" "Minimal testing")
 
 printf "Minimum code coverage requirement (%, enter for 80): "
-read CODE_COVERAGE </dev/tty
+read CODE_COVERAGE
 CODE_COVERAGE=${CODE_COVERAGE:-80}
 
 # Update test configuration
