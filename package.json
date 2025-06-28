@@ -4,7 +4,7 @@
   "description": "A CLI tool to scaffold a new full-stack AI application using the Jezweb boilerplate and framework.",
   "main": "index.js",
   "bin": {
-    "create-jezweb-ai-app": "./index.js"
+    "create-jezweb-ai-app": "index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
