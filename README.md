@@ -276,10 +276,6 @@ For detailed information, see the [Session Management Guide](.claude/guides/sess
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [OpenAPI Specification](https://swagger.io/specification/)
 
-## License
-
-[Your License Here]
-
 ---
 
 For questions or issues, please refer to the project's issue tracker or contact the development team.
