@@ -5,6 +5,10 @@
 ### 1. Customize Framework
 Configure your team's technology stack and preferences:
 ```bash
+# Node.js version (preferred when using npx)
+node ./scripts/customize-framework.js
+
+# Or bash version (for direct execution)
 ./scripts/customize-framework.sh
 ```
 
@@ -16,7 +20,8 @@ Install and configure tools for your selected technologies:
 
 ## Script Descriptions
 
-- **customize-framework.sh** - Interactive setup for team configuration, technology selection, and coding standards
+- **customize-framework.sh** - Interactive setup for team configuration, technology selection, and coding standards (bash version)
+- **customize-framework.js** - Node.js version of the customization script using @inquirer/prompts for better npx compatibility
 - **setup-dev-env.sh** - Installs development tools and dependencies based on detected technologies
 - **add-mcp.sh** - Adds MCP (Model Context Protocol) tools to your project
 - **validate-best-practices.sh** - Validates your project against configured best practices

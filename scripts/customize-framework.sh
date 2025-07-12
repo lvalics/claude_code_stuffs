@@ -26,6 +26,14 @@ if [ ! -d "$CLAUDE_DIR" ]; then
     exit 1
 fi
 
+# Check if we're in an interactive terminal
+if [ ! -t 0 ]; then
+    echo -e "${RED}Error: This script requires an interactive terminal${NC}"
+    echo "stdin is not available. This might happen when running through certain tools."
+    echo "Please ensure you're running this in a proper terminal environment."
+    exit 1
+fi
+
 # Create config directory if it doesn't exist
 mkdir -p "$CONFIG_DIR"
 
@@ -40,7 +48,7 @@ prompt_yes_no() {
     
     while true; do
         printf "%s (y/n): " "$prompt"
-        read response </dev/tty
+        read response
         case $response in
             [Yy]* ) return 0;;
             [Nn]* ) return 1;;
@@ -63,7 +71,7 @@ prompt_choice() {
     
     while true; do
         printf "Enter your choice (1-$((i-1))): "
-        read choice </dev/tty
+        read choice
         if [ "$choice" -ge 1 ] 2>/dev/null && [ "$choice" -le $((i-1)) ] 2>/dev/null; then
             j=1
             for option in "$@"; do
@@ -84,11 +92,11 @@ echo -e "${YELLOW}Let's start by gathering some information about your team:${NC
 echo
 
 printf "Enter your team/project name: "
-read TEAM_NAME </dev/tty
+read TEAM_NAME
 while [ -z "$TEAM_NAME" ]; do
     echo -e "${RED}Team name cannot be empty${NC}"
     printf "Enter your team/project name: "
-    read TEAM_NAME </dev/tty
+    read TEAM_NAME
 done
 
 TEAM_SIZE=$(prompt_choice "What is your team size?" "Solo developer" "Small team (2-5)" "Medium team (6-15)" "Large team (16+)")
@@ -154,7 +162,7 @@ INDENT_STYLE=$(prompt_choice "Preferred indentation style?" "2 spaces" "4 spaces
 
 # Line length
 printf "Maximum line length (default 80, enter for default): "
-read MAX_LINE_LENGTH </dev/tty
+read MAX_LINE_LENGTH
 MAX_LINE_LENGTH=${MAX_LINE_LENGTH:-80}
 
 # Naming conventions
@@ -166,7 +174,7 @@ echo -e "\n${YELLOW}Testing preferences:${NC}"
 TEST_FRAMEWORK=$(prompt_choice "Preferred testing approach?" "TDD (Test-Driven Development)" "BDD (Behavior-Driven Development)" "Traditional (tests after code)" "Minimal testing")
 
 printf "Minimum code coverage requirement (%, enter for 80): "
-read CODE_COVERAGE </dev/tty
+read CODE_COVERAGE
 CODE_COVERAGE=${CODE_COVERAGE:-80}
 
 # Update test configuration
