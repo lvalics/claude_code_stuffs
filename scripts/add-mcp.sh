@@ -104,6 +104,20 @@ install_snap_happy() {
     echo "snap-happy installed globally!"
 }
 
+# Function to install magic
+install_magic() {
+    echo "Installing magic MCP server..."
+    claude mcp add magic npx @21st-dev/magic@latest
+    echo "magic installed successfully!"
+}
+
+# Function to install sequential-thinking
+install_sequential_thinking() {
+    echo "Installing sequential-thinking MCP server..."
+    claude mcp add sequential-thinking npx @modelcontextprotocol/server-sequential-thinking
+    echo "sequential-thinking installed successfully!"
+}
+
 # Interactive menu
 echo "Select MCP servers to install (separate multiple with spaces):"
 echo "1) context7"
@@ -118,6 +132,8 @@ echo "9) github (requires personal access token)"
 echo "10) cloudflare-observability"
 echo "11) cloudflare-bindings"
 echo "12) snap-happy (screenshot tool)"
+echo "13) magic"
+echo "14) sequential-thinking"
 echo ""
 echo -n "Enter your choices (e.g., 1 2 3): "
 read choices
@@ -162,6 +178,12 @@ for choice in $choices; do
             ;;
         12)
             install_snap_happy
+            ;;
+        13)
+            install_magic
+            ;;
+        14)
+            install_sequential_thinking
             ;;
         *)
             echo "Invalid choice: $choice"
