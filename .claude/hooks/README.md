@@ -20,6 +20,8 @@ The hooks system allows you to intercept and respond to various events during Cl
 
 ### notification.py
 Handles user input notifications with optional Text-to-Speech (TTS) support. Automatically selects TTS provider based on available API keys (ElevenLabs > OpenAI > pyttsx3).
+  - Install PortAudio for OpenAI TTS: sudo apt-get install portaudio19-dev
+  - Install eSpeak for pyttsx3: sudo apt-get install espeak
 
 ### pre_tool_use.py
 Logs tool usage before execution for monitoring and debugging purposes.
