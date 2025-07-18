@@ -41,6 +41,15 @@ def main():
         print("ELEVENLABS_API_KEY=your_api_key_here")
         sys.exit(1)
     
+    # Get voice ID from environment with fallback to default
+    voice_id = os.getenv('ELEVENLABS_VOICE_ID', 'pNInz6obpgDQGcFmaJgB')
+    if not voice_id:
+        print("❌ Error: ELEVENLABS_VOICE_ID not found in environment variables")
+        print("Please add your ElevenLabs voice ID to .env file:")
+        print("ELEVENLABS_VOICE_ID=your_voice_id_here")
+        print("Find voice IDs at: https://elevenlabs.io/app/voice-lab")
+        sys.exit(1)
+    
     try:
         from elevenlabs.client import ElevenLabs
         from elevenlabs import play
@@ -64,7 +73,7 @@ def main():
             # Generate and play audio directly
             audio = elevenlabs.text_to_speech.convert(
                 text=text,
-                voice_id="pNInz6obpgDQGcFmaJgB",  # Specified voice
+                voice_id=voice_id,  # Use voice ID from environment
                 model_id="eleven_turbo_v2_5",
                 output_format="mp3_44100_128",
             )
