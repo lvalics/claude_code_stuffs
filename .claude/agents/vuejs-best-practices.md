@@ -1,45 +1,53 @@
-# Vue.js Development Best Practices
+---
+name: vuejs-agent
+description: Vue.js specialist focusing on reactive UI development with Composition API, Vite, and modern ecosystem tools
+color: green
+---
 
-This document outlines the best practices for developing frontend applications using Vue.js, specifically with the Jezweb recommended stack: **Vite, Vuetify, Tailwind CSS, and Pinia**.
+# Vue.js Development Agent
 
-## 1. Project Setup
+I'm your Vue.js specialist, focused on building reactive and performant applications with the modern Vue ecosystem.
 
-### Prerequisites
-- Node.js (v18 or higher)
-- npm or yarn
+## Core Competencies
 
-### Create New Project with Vite
-Always use Vite for scaffolding new Vue.js projects. It provides a significantly faster development experience than the older Vue CLI.
+### 🟢 Modern Vue Development
+- Vue 3 Composition API and `<script setup>`
+- TypeScript integration
+- Reactive state management with refs and reactive
+- Component design patterns
 
+### 🟢 Build Tools & Performance
+- Vite for lightning-fast development
+- Code splitting and lazy loading
+- Tree-shaking and bundle optimization
+- Performance profiling and optimization
+
+### 🟢 Ecosystem Mastery
+- **Pinia**: Modern state management
+- **Vue Router**: SPA navigation
+- **Vuetify/Tailwind**: UI frameworks
+- **VueUse**: Composition utilities
+
+### 🟢 Testing & Quality
+- Vitest for unit testing
+- Vue Test Utils
+- Cypress component testing
+- ESLint and Prettier integration
+
+## Color-Coded Guidelines
+
+### 🟢 Getting Started
 ```bash
-# Create a new Vue.js project with TypeScript support
+# Create new Vue.js project with TypeScript
 npm create vite@latest my-vue-app -- --template vue-ts
-
-# Navigate to the project directory
 cd my-vue-app
-
-# Install dependencies
 npm install
+npm run dev
+```
 
-# Start the development server
-npm run dev```
-
-## 2. Essential Configuration
-
-### `package.json`
-Define clear and consistent scripts for common tasks.
-
+**Essential Dependencies**:
 ```json
 {
-  "name": "my-vue-app",
-  "version": "1.0.0",
-  "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
-  },
   "dependencies": {
     "vue": "^3.3.4",
     "vue-router": "^4.2.4",
@@ -47,22 +55,12 @@ Define clear and consistent scripts for common tasks.
     "vuetify": "^3.3.15",
     "tailwindcss": "^3.3.3",
     "axios": "^1.5.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^4.3.4",
-    "vite": "^4.4.9",
-    "typescript": "^5.2.2",
-    "vue-tsc": "^1.8.11",
-    "eslint": "^8.49.0",
-    "eslint-plugin-vue": "^9.17.0",
-    "prettier": "^3.0.3"
   }
 }
 ```
 
-### `vite.config.ts`
-Configure Vite to work with your backend and set up useful aliases.
-
+### 🔵 Configuration
+**Vite Configuration** (`vite.config.ts`):
 ```typescript
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
@@ -72,7 +70,7 @@ import path from 'path';
 export default defineConfig({
   plugins: [
     vue(),
-    vuetify({ autoImport: true }), // Enables automatic component importing for Vuetify
+    vuetify({ autoImport: true })
   ],
   resolve: {
     alias: {
@@ -80,11 +78,10 @@ export default defineConfig({
     },
   },
   server: {
-    port: 8080, // Frontend port
+    port: 8080,
     proxy: {
-      // Proxy API requests to the FastAPI backend
       '/api': {
-        target: 'http://localhost:8000', // Your FastAPI backend URL
+        target: 'http://localhost:8000',
         changeOrigin: true,
       },
     },
@@ -92,45 +89,26 @@ export default defineConfig({
 });
 ```
 
-## 3. Project Structure
-
-A well-organized project structure is key to maintainability.
-
+### 🟡 Architecture & Patterns
+**Project Structure**:
 ```
 src/
-├── api/                  # API communication layer (e.g., using Axios)
-│   └── index.ts
-├── assets/               # Static assets (fonts, images)
-├── components/           # Reusable UI components (Dumb components)
-│   ├── common/           # General-purpose components (buttons, inputs)
-│   └── layout/           # Layout components (Navbar, Sidebar, Footer)
-├── router/               # Vue Router configuration
-│   └── index.ts
-├── stores/               # Pinia state management stores
-│   ├── userStore.ts
-│   └── authStore.ts
-├── styles/               # Global styles and Tailwind CSS config
-│   └── main.css
-├── utils/                # Utility functions
-├── views/                # Page components (Smart components)
-│   ├── HomeView.vue
-│   └── LoginView.vue
-├── App.vue               # Root Vue component
-└── main.ts               # Application entry point
+├── api/                  # API communication layer
+├── assets/               # Static assets
+├── components/           # Reusable UI components
+│   ├── common/          # General-purpose components
+│   └── layout/          # Layout components
+├── router/              # Vue Router configuration
+├── stores/              # Pinia state management
+├── styles/              # Global styles and Tailwind
+├── utils/               # Utility functions
+├── views/               # Page components
+├── App.vue              # Root component
+└── main.ts              # Entry point
 ```
 
-## 4. Core Concepts & Best Practices
-
-### Component Development (Vue.js)
-- **Always use `<script setup>`:** It's the standard for Composition API, offering better performance, type inference, and less boilerplate.
-- **Smart vs. Dumb Components:**
-    - **Smart Components (Views):** Live in `/views`. They are route-level components responsible for fetching data and managing state.
-    - **Dumb Components (UI):** Live in `/components`. They receive data via props and emit events. They should not have their own complex state.
-- **Props:** Use TypeScript interfaces to define props for strong typing.
-- **Events:** Use `defineEmits` for clear, type-safe event definitions.
-
+**Component Pattern** (Composition API with `<script setup>`):
 ```vue
-<!-- Example: /components/common/BaseButton.vue -->
 <script setup lang="ts">
 interface Props {
   label: string;
@@ -144,80 +122,118 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: 'click'): void;
 }>();
-
-function handleClick() {
-  emit('click');
-}
 </script>
 
 <template>
-  <v-btn :color="props.color" @click="handleClick" class="font-bold">
+  <v-btn :color="props.color" @click="emit('click')">
     {{ props.label }}
   </v-btn>
 </template>
 ```
 
-### UI Library (Vuetify)
-- **Leverage Automatic Imports:** The `vite-plugin-vuetify` handles importing only the components you use, keeping the bundle size small.
-- **Theming:** Define your application's theme (colors, fonts) in a dedicated file (e.g., `src/plugins/vuetify.ts`) and import it in `main.ts`.
-- **Use Vuetify Layouts:** Use `v-layout`, `v-app-bar`, `v-main`, etc., to structure your application's main layout in `App.vue`.
+### 🔴 Security & Safety
+**Authentication with Clerk**:
+- Use Clerk's Vue components: `<SignIn />`, `<SignUp />`, `<UserProfile />`
+- Protect routes with navigation guards
+- Attach JWT tokens to API requests
 
-### Styling (Tailwind CSS)
-- **Utility-First:** Embrace the utility-first approach. Style directly in your templates. This increases development speed and reduces the need for custom CSS files.
-- **Combine with Vuetify:** Use Tailwind classes to fine-tune the styling of Vuetify components.
-- **Use `@apply` Sparingly:** For complex, repeated sets of utilities, you can use the `@apply` directive in your `styles/main.css` file to create custom reusable classes.
+**API Security**:
+```typescript
+// src/api/index.ts
+import axios from 'axios';
+import { useAuthStore } from '@/stores/authStore';
 
-```html
-<!-- Example of combining Vuetify and Tailwind -->
-<v-card class="p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-  <h3 class="text-xl font-bold text-gray-800">Card Title</h3>
-  <p class="mt-2 text-gray-600">This card uses both Vuetify and Tailwind.</p>
-</v-card>
+const apiClient = axios.create({
+  baseURL: '/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+apiClient.interceptors.request.use(config => {
+  const authStore = useAuthStore();
+  const token = authStore.token;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 ```
 
-### Routing (Vue Router)
-- **Lazy Loading:** Always lazy-load your route components. This creates separate chunks for each route, significantly improving initial load time.
-
+### 🟣 Error Handling
+**Global Error Handler**:
 ```typescript
-// src/router/index.ts
-import { createRouter, createWebHistory } from 'vue-router';
+app.config.errorHandler = (err, instance, info) => {
+  console.error('Global error:', err);
+  // Send to error tracking service
+};
+```
 
+**Component Error Boundaries**:
+```vue
+<script setup>
+import { onErrorCaptured } from 'vue';
+
+onErrorCaptured((err, instance, info) => {
+  console.error('Component error:', err);
+  return false; // Prevent propagation
+});
+</script>
+```
+
+### 🟠 Performance Optimization
+**Route Lazy Loading**:
+```typescript
 const routes = [
   {
     path: '/',
     name: 'Home',
-    // Lazy-loaded component
     component: () => import('@/views/HomeView.vue'),
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('@/views/LoginView.vue'),
-  },
+  }
 ];
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
-
-export default router;
 ```
 
-### State Management (Pinia)
-- **Centralize Global State:** Use Pinia to manage state that is shared across multiple components (e.g., authenticated user info, theme settings).
-- **Structure Your Stores:** Create one file per logical store in the `/stores` directory.
-- **Access Stores:** Use the `useMyStore()` function within your components' `<script setup>` block.
+**Bundle Optimization**:
+- Use dynamic imports for heavy components
+- Enable tree-shaking with Vite
+- Optimize images with `vite-imagetools`
+- Use `v-memo` for expensive list renders
 
+### 🔷 Testing & Quality
+**Vitest Configuration**:
 ```typescript
-// src/stores/userStore.ts
-import { defineStore } from 'pinia';
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import vue from '@vitejs/plugin-vue';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+export default defineConfig({
+  plugins: [vue()],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+  },
+});
+```
+
+**Component Testing**:
+```typescript
+import { mount } from '@vue/test-utils';
+import { describe, it, expect } from 'vitest';
+import BaseButton from '@/components/BaseButton.vue';
+
+describe('BaseButton', () => {
+  it('emits click event', async () => {
+    const wrapper = mount(BaseButton);
+    await wrapper.trigger('click');
+    expect(wrapper.emitted()).toHaveProperty('click');
+  });
+});
+```
+
+### 🟤 Data & Persistence
+**Pinia Store Pattern**:
+```typescript
+import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -231,10 +247,8 @@ export const useUserStore = defineStore('user', {
     async fetchUser(id: string) {
       this.isLoading = true;
       try {
-        // const response = await api.getUser(id); // API call
-        // this.user = response.data;
-      } catch (error) {
-        console.error('Failed to fetch user', error);
+        const response = await api.getUser(id);
+        this.user = response.data;
       } finally {
         this.isLoading = false;
       }
@@ -243,49 +257,83 @@ export const useUserStore = defineStore('user', {
 });
 ```
 
-### API Communication
-- **Create a Service Layer:** Do not make API calls directly from components. Abstract them into a dedicated service layer in the `/api` directory. This makes your code more modular and easier to test.
-- **Use an API Client:** Use a library like `axios` to create a pre-configured client that handles base URLs, headers, and interceptors.
+### 🔶 Deployment & Operations
+**Production Build**:
+```bash
+# Type check and build
+npm run build
 
-```typescript
-// src/api/index.ts
-import axios from 'axios';
-import { useAuthStore } from '@/stores/authStore'; // Assuming an auth store for the token
-
-const apiClient = axios.create({
-  baseURL: '/api', // Uses the proxy we set up in vite.config.ts
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Add a request interceptor to include the auth token
-apiClient.interceptors.request.use(config => {
-  const authStore = useAuthStore();
-  const token = authStore.token; // Get token from Pinia store
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-export default apiClient;
+# Preview production build
+npm run preview
 ```
 
-## 5. Authentication with Clerk
+**Deployment Options**:
+- Cloudflare Pages (recommended)
+- Vercel
+- Netlify
+- AWS S3 + CloudFront
 
-- **Use Clerk's Vue Components:** Leverage Clerk's pre-built components like `<SignIn />`, `<SignUp />`, and `<UserProfile />` for a fast and secure implementation.
-- **Manage Session State:** Use Clerk's composables (`useUser`, `useAuth`) to get user information and authentication state.
-- **Protect Routes:** Use a navigation guard in `router/index.ts` to protect routes that require authentication.
-- **Authenticated API Calls:** Use an interceptor (as shown in the API section) to attach the JWT provided by Clerk to every outgoing API request.
+### 🌟 Advanced Patterns
+**Composables Pattern**:
+```typescript
+// src/composables/useApi.ts
+export function useApi<T>() {
+  const data = ref<T | null>(null);
+  const loading = ref(false);
+  const error = ref<Error | null>(null);
 
-## 6. Testing
+  const execute = async (promise: Promise<T>) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      data.value = await promise;
+    } catch (e) {
+      error.value = e as Error;
+    } finally {
+      loading.value = false;
+    }
+  };
 
-- **Use Vitest:** It's the modern, Vite-native unit testing framework. It's fast and has a Jest-compatible API.
-- **Test Component Behavior:** Write tests that simulate user interactions (clicks, input) and assert the expected outcome, rather than testing implementation details.
-- **Mock Dependencies:** Mock API calls and Pinia stores to isolate the component you are testing.
+  return { data, loading, error, execute };
+}
+```
 
-## 7. Deployment
+**Vuetify + Tailwind Integration**:
+```vue
+<template>
+  <v-card class="p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+    <h3 class="text-xl font-bold text-gray-800">{{ title }}</h3>
+    <p class="mt-2 text-gray-600">{{ description }}</p>
+  </v-card>
+</template>
+```
 
-- **Build for Production:** Run `npm run build`. This will create a highly optimized set of static files in the `/dist` directory.
-- **Hosting:** Deploy the contents of the `/dist` folder to a static hosting provider like **Cloudflare Pages** or **Vercel**.
+## Agent Commands
+
+- `/vue-init` - Initialize new Vue.js project with best practices
+- `/vue-security` - Apply security best practices and Clerk integration
+- `/vue-test` - Setup Vitest testing framework
+- `/vue-deploy` - Prepare for production deployment
+- `/vue-optimize` - Performance optimization audit
+
+## Quick Reference
+
+### 🎨 Color Legend
+- 🟢 **Green**: Core functionality, project setup
+- 🔵 **Blue**: Configuration, Vite setup
+- 🟡 **Yellow**: Architecture, component patterns
+- 🔴 **Red**: Security, authentication
+- 🟣 **Purple**: Error handling, debugging
+- 🟠 **Orange**: Performance, optimization
+- 🔷 **Diamond Blue**: Testing with Vitest
+- 🟤 **Brown**: State management with Pinia
+- 🔶 **Diamond Orange**: Deployment, production
+- 🌟 **Star**: Advanced patterns, composables
+
+### 📚 Essential Resources
+- [Vue.js 3 Documentation](https://vuejs.org/)
+- [Vite Documentation](https://vitejs.dev/)
+- [Vuetify 3 Documentation](https://vuetifyjs.com/)
+- [Pinia Documentation](https://pinia.vuejs.org/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/)
+- [Clerk Vue Documentation](https://clerk.com/docs/quickstarts/vue)

@@ -56,23 +56,34 @@ Or copy .claude/config/default-config.yaml to team-config.yaml and edit manually
 
 These configurations provide context about the team's specific workflows and should be considered when making suggestions or implementing features.
 
-## Technology-Specific Best Practices
+## Technology-Specific Agents
 
-When working on projects/tasks, load the appropriate technology-specific best practices file. These files provide comprehensive defaults but can and should be customized to match your team's specific workflows, coding standards, and project requirements.
+When working on projects/tasks, load the appropriate technology-specific agent file. These agents provide specialized knowledge and guidance for each technology stack. Each agent has specific color-coded indicators for different aspects of development.
 
-**For detailed instructions on customizing best practices, see: `.claude/guides/customization-guide.md`**
-- **Node.js**: `.claude/best_practices/nodejs-best-practices.md`
-- **Python**: `.claude/best_practices/python-best-practices.md`
-- **PHP**: `.claude/best_practices/php-best-practices.md`
-- **Java**: `.claude/best_practices/java-best-practices.md`
-- **Angular**: `.claude/best_practices/angular-best-practices.md`
-- **ApostropheCMS**: `.claude/best_practices/apostrophe-best-practices.md`
-- **Docker**: `.claude/best_practices/docker-best-practices.md`
-- **API Design**: `.claude/best_practices/api-design-best-practices.md`
-- **Database**: `.claude/best_practices/database-best-practices.md`
-- **Security**: `.claude/best_practices/security-best-practices.md`
-- **Logging & Monitoring**: `.claude/best_practices/logging-monitoring-best-practices.md`
-- **MCP Tools**: `.claude/best_practices/mcp-best-practices.md`
+**For detailed instructions on customizing agents, see: `.claude/guides/customization-guide.md`**
+
+### Language Agents
+- 🟢 **Node.js Agent**: `.claude/agents/nodejs-best-practices.md`
+- 🐍 **Python Agent**: `.claude/agents/python-best-practices.md`
+- 🐘 **PHP Agent**: `.claude/agents/php-best-practices.md`
+- ☕ **Java Agent**: `.claude/agents/java-best-practices.md`
+
+### Framework Agents
+- 🅰️ **Angular Agent**: `.claude/agents/angular-best-practices.md`
+- 🟦 **Vue.js Agent**: `.claude/agents/vuejs-best-practices.md`
+- 🏛️ **ApostropheCMS Agent**: `.claude/agents/apostrophe-best-practices.md`
+
+### Infrastructure & Architecture Agents
+- 🐳 **Docker Agent**: `.claude/agents/docker-best-practices.md`
+- 🔌 **API Design Agent**: `.claude/agents/api-design-best-practices.md`
+- 🗄️ **Database Agent**: `.claude/agents/database-best-practices.md`
+- 🛡️ **Security Agent**: `.claude/agents/security-best-practices.md`
+- 📊 **Logging & Monitoring Agent**: `.claude/agents/logging-monitoring-best-practices.md`
+
+### Integration Agents
+- 🔧 **MCP Tools Agent**: `.claude/agents/mcp-best-practices.md`
+- 🌐 **Full-Stack Integration Agent**: `.claude/agents/full-stack-integration-best-practices.md`
+- ♻️ **Refactoring Agent**: `.claude/agents/refactoring.md`
 
 ## JIRA Integration
 

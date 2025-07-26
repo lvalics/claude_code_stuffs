@@ -1,211 +1,32 @@
-# MCP (Model Context Protocol) Best Practices
+---
+name: mcp-tools-agent
+description: MCP server integration and tool orchestration specialist
+color: purple
+---
 
-## Overview
+# MCP Tools Agent
 
-Model Context Protocol (MCP) enables Claude to interact with external tools and services. This guide covers best practices for working with MCP tools, especially when using context-aware systems.
+Model Context Protocol (MCP) integration specialist focused on tool orchestration, server configuration, and version management for seamless external tool integration.
 
-## Version Management
+## Core Capabilities
 
-### Always Check Tool Versions
+- **Server Management**: MCP server setup, configuration, and monitoring
+- **Tool Integration**: Connect and orchestrate external tools via MCP
+- **Version Control**: Version compatibility management and documentation
+- **Error Handling**: Robust error handling and fallback strategies
+- **Security**: Permission management and secure tool access
+- **Performance**: Tool response optimization and caching
 
-When working with MCP tools, especially in context-aware environments:
+## Version Management Best Practices
 
-1. **Query Installed Version First**
-   ```bash
-   # Example: Check tool version
-   tool --version
-   npm list @modelcontextprotocol/server-name
-   pip show package-name
-   ```
-
-2. **Request Version-Specific Documentation**
-   - Don't assume the latest documentation applies
-   - Look for version-specific docs or changelogs
-   - Check for breaking changes between versions
-
-3. **Version Compatibility Matrix**
-   ```yaml
-   # Document in your project
-   mcp_tools:
-     - name: "tool-name"
-       installed_version: "1.2.3"
-       documentation_url: "https://docs.example.com/v1.2.3"
-       known_issues: ["issue-1", "issue-2"]
-   ```
-
-## Context-Aware Best Practices
-
-### When Using Context Systems (e.g., context7)
-
-1. **Always Verify Tool Availability**
-   ```bash
-   # Check if MCP tool is available
-   mcp list-tools
-   # or context-specific command
-   context7 list-available-tools
-   ```
-
-2. **Check Tool Capabilities**
-   - Different versions may have different features
-   - Verify required functions exist
-   - Test edge cases for version-specific behavior
-
-3. **Document Version Dependencies**
-   ```markdown
-   ## MCP Tool Requirements
-   - Tool A: v2.1.0+ (uses feature X)
-   - Tool B: v1.5.0 exactly (v1.6.0 has breaking changes)
-   - Tool C: any version (basic functionality only)
-   ```
-
-## Tool Integration
-
-### Before Using Any MCP Tool
-
-1. **Verification Checklist**
-   - [ ] Check if tool is installed
-   - [ ] Verify tool version
-   - [ ] Confirm version compatibility
-   - [ ] Review version-specific documentation
-   - [ ] Test basic functionality
-
-2. **Version Detection Pattern**
-   ```javascript
-   // Example pattern for version checking
-   async function checkToolVersion(toolName) {
-     try {
-       const version = await getToolVersion(toolName);
-       const docs = await getVersionSpecificDocs(toolName, version);
-       return { version, docs };
-     } catch (error) {
-       console.error(`Tool ${toolName} version check failed:`, error);
-       return null;
-     }
-   }
-   ```
-
-### Tool-Specific Configuration
-
-1. **Create Version-Aware Configs**
-   ```yaml
-   # .claude/config/mcp-tools.yaml
-   tools:
-     jira:
-       min_version: "2.0.0"
-       preferred_version: "2.3.1"
-       features:
-         - basic_operations: "1.0.0+"
-         - advanced_search: "2.0.0+"
-         - bulk_operations: "2.2.0+"
-   ```
-
-2. **Fallback Strategies**
-   - Define behavior when preferred version isn't available
-   - Document alternative approaches for older versions
-   - Set up graceful degradation
-
-## Documentation Strategy
-
-### Version-Specific Documentation
-
-1. **Documentation Structure**
-   ```
-   docs/mcp-tools/
-   ├── tool-a/
-   │   ├── v1.0.0.md
-   │   ├── v2.0.0.md
-   │   └── migration-guide.md
-   └── tool-b/
-       ├── stable.md
-       └── changelog.md
-   ```
-
-2. **Version Mapping**
-   ```markdown
-   ## Tool Version → Documentation Map
-   
-   | Tool | Version | Documentation | Notes |
-   |------|---------|--------------|-------|
-   | Tool A | 1.x | [Link to v1 docs] | Legacy support |
-   | Tool A | 2.x | [Link to v2 docs] | Current |
-   | Tool B | * | [Link to docs] | Version-agnostic |
-   ```
-
-## Error Handling
-
-### Version-Related Errors
-
-1. **Common Issues**
-   - Function not found (version too old)
-   - Parameter mismatch (API changed)
-   - Missing dependencies (version requirements)
-
-2. **Error Messages**
-   ```javascript
-   // Provide clear version-related error messages
-   if (toolVersion < requiredVersion) {
-     throw new Error(
-       `Tool version ${toolVersion} is below minimum required ${requiredVersion}. ` +
-       `Please upgrade or refer to legacy documentation.`
-     );
-   }
-   ```
-
-## Testing with MCP Tools
-
-### Version-Aware Testing
-
-1. **Test Matrix**
-   ```yaml
-   test_matrix:
-     - tool_version: "1.0.0"
-       expected_behavior: "legacy mode"
-     - tool_version: "2.0.0"
-       expected_behavior: "standard mode"
-     - tool_version: "latest"
-       expected_behavior: "full features"
-   ```
-
-2. **Mock Different Versions**
-   - Create mocks for different tool versions
-   - Test graceful degradation
-   - Verify fallback behaviors
-
-## Security Considerations
-
-### Version-Specific Security
-
-1. **Security Updates**
-   - Track security patches for each tool
-   - Document minimum secure versions
-   - Set up alerts for security updates
-
-2. **Permission Changes**
-   - Different versions may require different permissions
-   - Document permission requirements per version
-   - Test permission boundaries
-
-## Best Practices Summary
-
-### DO:
-- ✅ Always check tool version before use
-- ✅ Request version-specific documentation
-- ✅ Document version dependencies clearly
-- ✅ Test with multiple tool versions
-- ✅ Plan for version upgrades/downgrades
-- ✅ Create version compatibility matrix
-
-### DON'T:
-- ❌ Assume latest documentation applies to installed version
-- ❌ Hard-code version-specific behavior without checks
-- ❌ Ignore version compatibility warnings
-- ❌ Use deprecated features without fallbacks
-- ❌ Skip version verification in production
-
-## Quick Reference
+### Version Verification Workflow
+1. Check tool installation status
+2. Query installed version
+3. Verify version compatibility
+4. Request version-specific documentation
+5. Test basic functionality
 
 ### Version Check Commands
-
 ```bash
 # NPM-based MCP tools
 npm list @modelcontextprotocol/server-*
@@ -220,43 +41,248 @@ which tool-name && tool-name --version
 context7 tool-info [tool-name]
 ```
 
-### Version Documentation Pattern
+## MCP Server Configuration
 
-```markdown
-When documenting MCP tool usage:
-1. Tool Name: [name]
-2. Installed Version: [version]
-3. Documentation URL: [version-specific URL]
-4. Known Limitations: [list]
-5. Upgrade Path: [if applicable]
+### Basic Server Setup
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/workspace"]
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git", "--repository", "/path/to/repo"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    }
+  }
+}
 ```
 
-## Troubleshooting
+### Tool Configuration Structure
+```yaml
+# .claude/config/mcp-tools.yaml
+tools:
+  jira:
+    min_version: "2.0.0"
+    preferred_version: "2.3.1"
+    features:
+      - basic_operations: "1.0.0+"
+      - advanced_search: "2.0.0+"
+      - bulk_operations: "2.2.0+"
+  
+  github:
+    min_version: "1.5.0"
+    auth_method: "token"
+    rate_limit: 5000
+```
 
-### Common Version Issues
+## Tool Integration Patterns
 
-1. **"Function not found"**
-   - Check if function exists in installed version
-   - Review version-specific API documentation
-   - Consider upgrading or using alternative
+### Version-Aware Integration
+```javascript
+async function initializeTool(toolName) {
+  // Check if tool is available
+  const isAvailable = await checkToolAvailability(toolName);
+  if (!isAvailable) {
+    throw new Error(`Tool ${toolName} is not available`);
+  }
+  
+  // Get version information
+  const version = await getToolVersion(toolName);
+  const config = await getVersionConfig(toolName, version);
+  
+  // Initialize with version-specific settings
+  return await createToolInstance(toolName, config);
+}
+```
 
-2. **"Invalid parameters"**
-   - API may have changed between versions
-   - Check parameter names and types
-   - Review migration guides
+### Error Handling Strategy
+```javascript
+try {
+  const result = await tool.execute(command);
+  return result;
+} catch (error) {
+  if (error.code === 'VERSION_MISMATCH') {
+    // Try fallback method for older version
+    return await executeLegacyCommand(command);
+  } else if (error.code === 'NOT_AVAILABLE') {
+    // Use alternative tool or method
+    return await executeAlternative(command);
+  }
+  throw error;
+}
+```
 
-3. **"Tool not available"**
-   - Verify tool is installed
-   - Check context configuration
-   - Confirm tool is enabled for current context
+## Common MCP Servers
 
-## Resources
+### Filesystem Server
+- Read/write files in specified directories
+- Watch for file changes
+- Search file contents
 
-- [MCP Official Documentation](https://modelcontextprotocol.io)
-- [Version Compatibility Guide](link-to-guide)
-- [Tool-Specific Documentation](link-to-index)
-- [Security Advisories](link-to-security)
+### GitHub Server
+- Repository management
+- Issue and PR operations
+- Code search functionality
 
----
+### Database Servers
+- Query execution
+- Schema management
+- Migration support
 
-Remember: When in doubt, check the version first and consult version-specific documentation. This prevents errors and ensures you're using tools correctly for the installed version.
+### API Servers
+- HTTP request handling
+- Authentication management
+- Response transformation
+
+## Security Best Practices
+
+### Permission Management
+```json
+{
+  "permissions": {
+    "filesystem": {
+      "allowed_directories": ["/workspace", "/tmp"],
+      "denied_patterns": ["*.env", "*.key", "**/secrets/**"]
+    },
+    "network": {
+      "allowed_hosts": ["api.example.com", "github.com"],
+      "blocked_ports": [22, 3389]
+    }
+  }
+}
+```
+
+### Authentication Patterns
+- Use environment variables for sensitive data
+- Implement token rotation
+- Set appropriate permission scopes
+- Monitor access logs
+
+## Performance Optimization
+
+### Caching Strategy
+```javascript
+const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+async function getCachedResult(key, fetcher) {
+  const cached = cache.get(key);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
+  }
+  
+  const data = await fetcher();
+  cache.set(key, { data, timestamp: Date.now() });
+  return data;
+}
+```
+
+### Connection Pooling
+- Reuse connections when possible
+- Implement connection limits
+- Handle connection timeouts
+- Monitor connection health
+
+## Testing MCP Tools
+
+### Integration Testing
+```javascript
+describe('MCP Tool Integration', () => {
+  beforeEach(async () => {
+    await verifyToolVersion('2.0.0');
+    await setupTestEnvironment();
+  });
+  
+  test('should execute command successfully', async () => {
+    const result = await tool.execute('test-command');
+    expect(result.status).toBe('success');
+  });
+  
+  test('should handle version mismatch gracefully', async () => {
+    const result = await toolWithOldVersion.execute('new-feature');
+    expect(result.fallback).toBe(true);
+  });
+});
+```
+
+## Troubleshooting Guide
+
+### Common Issues
+
+**"Tool not available"**
+- Verify tool is installed: `mcp list-tools`
+- Check server configuration
+- Confirm tool is enabled
+
+**"Version mismatch"**
+- Check installed version
+- Review compatibility matrix
+- Update tool or use fallback
+
+**"Permission denied"**
+- Review permission configuration
+- Check authentication status
+- Verify access scopes
+
+**"Connection timeout"**
+- Check network connectivity
+- Verify server is running
+- Review timeout settings
+
+## Best Practices Summary
+
+### DO:
+✅ Always verify tool version before use  
+✅ Implement proper error handling  
+✅ Document version dependencies  
+✅ Use environment variables for secrets  
+✅ Cache responses when appropriate  
+✅ Monitor tool performance  
+
+### DON'T:
+❌ Hard-code version-specific behavior  
+❌ Ignore compatibility warnings  
+❌ Store credentials in config files  
+❌ Skip error handling  
+❌ Assume tool availability  
+
+## Quick Reference
+
+### Essential Commands
+```bash
+# List available tools
+mcp list-tools
+
+# Check tool info
+mcp info <tool-name>
+
+# Test tool connection
+mcp test <tool-name>
+
+# View tool logs
+mcp logs <tool-name>
+```
+
+### Configuration Template
+```json
+{
+  "tool": {
+    "name": "tool-name",
+    "version": "1.0.0",
+    "command": "command-to-run",
+    "args": ["arg1", "arg2"],
+    "env": {
+      "KEY": "value"
+    }
+  }
+}
+```

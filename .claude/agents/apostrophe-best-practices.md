@@ -1,4 +1,21 @@
-# ApostropheCMS Development Best Practices
+---
+name: apostrophe-cms
+description: ApostropheCMS 3.x specialist for content management, module development, and enterprise CMS solutions
+color: blue
+---
+
+# ApostropheCMS Agent
+
+ApostropheCMS 3.x specialist focused on building enterprise-grade content management systems with modular architecture, custom widgets, and scalable content strategies.
+
+## Core Capabilities
+
+- **Module Development**: Create custom modules, widgets, and page types
+- **Content Architecture**: Design scalable content structures and relationships
+- **Template Systems**: Nunjucks templating and area management
+- **API Development**: RESTful APIs and custom routes
+- **Performance**: Caching strategies and asset optimization
+- **Enterprise Features**: Multi-site, workflow, localization
 
 ## Project Setup
 
@@ -21,56 +38,6 @@ npm run dev
 ```
 
 ### Essential Configuration Files
-
-#### package.json
-```json
-{
-  "name": "my-apostrophe-project",
-  "version": "1.0.0",
-  "description": "Apostrophe 3 Project",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app",
-    "dev": "nodemon",
-    "build": "NODE_ENV=production node app @apostrophecms/asset:build",
-    "serve": "NODE_ENV=production node app",
-    "release": "node app @apostrophecms/migration:migrate && npm run build",
-    "lint": "eslint .",
-    "test": "npm run lint"
-  },
-  "nodemonConfig": {
-    "delay": 1000,
-    "verbose": true,
-    "watch": [
-      "./app.js",
-      "./modules/**/*",
-      "./lib/**/*.js",
-      "./views/**/*.html"
-    ],
-    "ignoreRoot": [
-      ".git"
-    ],
-    "ignore": [
-      "**/ui/apos/",
-      "**/ui/src/",
-      "**ui/public/",
-      "locales/*.json",
-      "public/uploads/",
-      "public/apos-frontend/*.js",
-      "data/"
-    ],
-    "ext": "json, js, html, scss, vue"
-  },
-  "dependencies": {
-    "apostrophe": "^3.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.0.0",
-    "eslint-config-apostrophe": "^3.0.0",
-    "nodemon": "^2.0.0"
-  }
-}
-```
 
 #### app.js
 ```javascript
@@ -110,48 +77,52 @@ require('apostrophe')({
 });
 ```
 
-#### .env
-```bash
-# MongoDB
-MONGODB_URI=mongodb://localhost:27017/my-project
-
-# Server
-PORT=3000
-NODE_ENV=development
-
-# Session
-SESSION_SECRET=your-random-secret-here
-
-# Admin
-APOS_ADMIN_PASSWORD=admin-password
-
-# S3 (optional)
-APOS_S3_BUCKET=
-APOS_S3_SECRET=
-APOS_S3_KEY=
-APOS_S3_REGION=
-
-# Email
-APOS_EMAIL_FROM=noreply@example.com
-APOS_EMAIL_TRANSPORT=smtp://username:password@smtp.example.com
-```
-
-#### .gitignore
-```
-node_modules/
-data/
-public/uploads/
-public/apos-frontend/
-.env
-.env.local
-*.log
-.DS_Store
-.nyc_output/
-coverage/
-.idea/
-.vscode/
-*.swp
-*.swo
+#### package.json
+```json
+{
+  "name": "my-apostrophe-project",
+  "version": "1.0.0",
+  "description": "Apostrophe 3 Project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon",
+    "build": "NODE_ENV=production node app @apostrophecms/asset:build",
+    "serve": "NODE_ENV=production node app",
+    "release": "node app @apostrophecms/migration:migrate && npm run build",
+    "lint": "eslint .",
+    "test": "npm run lint"
+  },
+  "nodemonConfig": {
+    "delay": 1000,
+    "verbose": true,
+    "watch": [
+      "./app.js",
+      "./modules/**/*",
+      "./lib/**/*.js",
+      "./views/**/*.html"
+    ],
+    "ignoreRoot": [".git"],
+    "ignore": [
+      "**/ui/apos/",
+      "**/ui/src/",
+      "**ui/public/",
+      "locales/*.json",
+      "public/uploads/",
+      "public/apos-frontend/*.js",
+      "data/"
+    ],
+    "ext": "json, js, html, scss, vue"
+  },
+  "dependencies": {
+    "apostrophe": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "eslint-config-apostrophe": "^3.0.0",
+    "nodemon": "^2.0.0"
+  }
+}
 ```
 
 ## Project Structure
@@ -183,14 +154,9 @@ project-root/
 │   ├── layout.html            # Base layout
 │   └── partials/              # Reusable partials
 ├── public/                    # Static files
-│   ├── css/
-│   ├── js/
-│   └── images/
 ├── data/                      # MongoDB data (dev only)
 ├── app.js                     # Main application file
-├── package.json
-├── .env
-└── README.md
+└── package.json
 ```
 
 ## Module Development
@@ -272,36 +238,6 @@ module.exports = {
 };
 ```
 
-### Creating a Page Type
-```javascript
-// modules/default-page/index.js
-module.exports = {
-  extend: '@apostrophecms/page-type',
-  
-  options: {
-    label: 'Default Page'
-  },
-  
-  fields: {
-    add: {
-      main: {
-        type: 'area',
-        label: 'Main Content',
-        options: {
-          widgets: {
-            '@apostrophecms/rich-text': {},
-            '@apostrophecms/image': {},
-            '@apostrophecms/video': {},
-            '@apostrophecms/html': {},
-            'two-column': {}
-          }
-        }
-      }
-    }
-  }
-};
-```
-
 ### Creating a Widget
 ```javascript
 // modules/two-column/index.js
@@ -336,6 +272,45 @@ module.exports = {
         }
       }
     }
+  }
+};
+```
+
+### Custom API Routes
+```javascript
+// modules/article/index.js
+module.exports = {
+  extend: '@apostrophecms/piece-type',
+  
+  apiRoutes(self) {
+    return {
+      get: {
+        // GET /api/v1/article/latest
+        async latest(req) {
+          const articles = await self.find(req, {})
+            .sort({ createdAt: -1 })
+            .limit(10)
+            .toArray();
+          
+          return {
+            articles
+          };
+        }
+      },
+      post: {
+        // POST /api/v1/article/subscribe
+        async subscribe(req) {
+          const { email } = self.apos.launder.sanitize(req.body, {
+            email: 'string'
+          });
+          
+          // Handle subscription logic
+          return {
+            success: true
+          };
+        }
+      }
+    };
   }
 };
 ```
@@ -380,19 +355,6 @@ module.exports = {
 {% endblock %}
 ```
 
-### Page Template
-```html
-{# modules/default-page/views/page.html #}
-{% extends "layout.html" %}
-
-{% block content %}
-  <div class="container">
-    <h1>{{ data.page.title }}</h1>
-    {% area data.page, 'main' %}
-  </div>
-{% endblock %}
-```
-
 ### Widget Template
 ```html
 {# modules/two-column/views/widget.html #}
@@ -406,14 +368,12 @@ module.exports = {
 </div>
 ```
 
-## Frontend Assets
+## Frontend Development
 
-### JavaScript
+### JavaScript Module
 ```javascript
 // modules/asset/ui/src/index.js
 export default () => {
-  // Self-executing function for Apostrophe frontend
-  
   // Progressive enhancement
   document.addEventListener('DOMContentLoaded', () => {
     // Mobile menu toggle
@@ -426,42 +386,52 @@ export default () => {
       });
     }
     
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
+    // Lazy load images
+    const images = document.querySelectorAll('img[data-lazy]');
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.lazy;
+          img.removeAttribute('data-lazy');
+          imageObserver.unobserve(img);
         }
       });
     });
+    
+    images.forEach(img => imageObserver.observe(img));
   });
 };
 ```
 
-### SCSS
+### SCSS Styling
 ```scss
 // modules/asset/ui/src/index.scss
 
 // Variables
 $primary-color: #0066cc;
 $text-color: #333;
-$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+// Mixins
+@mixin container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
 
 // Base styles
 body {
-  font-family: $font-family;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: $text-color;
   line-height: 1.6;
   margin: 0;
 }
 
-// Layout
+// Layout components
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  @include container;
 }
 
 // Two column widget
@@ -471,87 +441,15 @@ body {
   gap: 2rem;
   margin: 2rem 0;
   
-  @media (max-width: 768px) {
+  @media (max-width: $breakpoint-tablet) {
     grid-template-columns: 1fr;
   }
 }
-
-// Navigation
-nav {
-  background: $primary-color;
-  padding: 1rem 0;
-  
-  .nav-menu {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    
-    a {
-      color: white;
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      
-      &:hover,
-      &.active {
-        background: rgba(255, 255, 255, 0.1);
-      }
-    }
-  }
-}
-```
-
-## Common Commands
-
-### Development
-```bash
-# Start development server
-npm run dev
-
-# Build assets for production
-npm run build
-
-# Start production server
-npm start
-
-# Create a new user
-node app @apostrophecms/user:add admin admin
-
-# Reset admin password
-node app @apostrophecms/user:change-password admin
-
-# Run migrations
-node app @apostrophecms/migration:migrate
-```
-
-### Database Operations
-```bash
-# Export database
-node app @apostrophecms/db:export
-
-# Import database
-node app @apostrophecms/db:import
-
-# List migrations
-node app @apostrophecms/migration:list
-
-# Create new migration
-node app @apostrophecms/migration:create
-```
-
-### Asset Management
-```bash
-# Clear asset cache
-rm -rf public/apos-frontend/*
-npm run build
-
-# Sync public assets to S3 (if configured)
-node app @apostrophecms/attachment:sync-to-uploadfs
 ```
 
 ## Performance Optimization
 
-### Caching Strategy
+### Caching Configuration
 ```javascript
 // modules/@apostrophecms/page/index.js
 module.exports = {
@@ -559,7 +457,9 @@ module.exports = {
     cache: {
       page: {
         // Cache pages for 1 hour
-        maxAge: 60 * 60
+        maxAge: 60 * 60,
+        // Cache different versions for logged-in users
+        varyOn: ['req.user']
       }
     }
   }
@@ -597,6 +497,11 @@ module.exports = {
           name: 'one-third',
           width: 380,
           height: 700
+        },
+        {
+          name: 'thumbnail',
+          width: 100,
+          height: 100
         }
       ]
     }
@@ -616,6 +521,13 @@ module.exports = {
     },
     session: {
       secret: process.env.SESSION_SECRET
+    },
+    uploadfs: {
+      storage: 's3',
+      bucket: process.env.S3_BUCKET,
+      secret: process.env.S3_SECRET,
+      key: process.env.S3_KEY,
+      region: process.env.S3_REGION
     }
   }
 };
@@ -629,12 +541,26 @@ module.exports = {
     return {
       post: {
         async submit(req) {
-          const { title, content } = self.apos.launder.sanitize(req.body, {
-            title: 'string',
-            content: 'string'
+          const cleaned = self.apos.launder.sanitize(req.body, {
+            title: {
+              type: 'string',
+              max: 200
+            },
+            content: {
+              type: 'string',
+              max: 5000
+            },
+            tags: {
+              type: 'array',
+              items: {
+                type: 'string',
+                max: 50
+              }
+            }
           });
           
           // Process sanitized input
+          return await self.insert(req, cleaned);
         }
       }
     };
@@ -642,7 +568,58 @@ module.exports = {
 };
 ```
 
-## Testing
+## Common Commands
+
+### Development
+```bash
+# Start development server
+npm run dev
+
+# Build assets for production
+npm run build
+
+# Start production server
+npm start
+
+# Create a new user
+node app @apostrophecms/user:add admin admin
+
+# Reset admin password
+node app @apostrophecms/user:change-password admin
+
+# Run migrations
+node app @apostrophecms/migration:migrate
+```
+
+### Database Operations
+```bash
+# Export database
+node app @apostrophecms/db:export > backup.json
+
+# Import database
+node app @apostrophecms/db:import < backup.json
+
+# List migrations
+node app @apostrophecms/migration:list
+
+# Create new migration
+node app @apostrophecms/migration:create my-migration
+```
+
+### Deployment
+```bash
+# Build and prepare for deployment
+npm run release
+
+# Sync assets to CDN (if configured)
+node app @apostrophecms/attachment:sync-to-uploadfs
+
+# Clear asset cache
+rm -rf public/apos-frontend/*
+npm run build
+```
+
+## Testing Strategy
 
 ### Unit Testing
 ```javascript
@@ -673,31 +650,37 @@ describe('Article Module', function() {
   it('should insert an article', async function() {
     const article = await apos.article.insert(apos.task.getReq(), {
       title: 'Test Article',
-      slug: 'test-article'
+      slug: 'test-article',
+      subtitle: 'Test subtitle'
     });
     
     assert(article._id);
     assert.equal(article.title, 'Test Article');
   });
+  
+  it('should find articles', async function() {
+    const articles = await apos.article.find(apos.task.getReq())
+      .toArray();
+    
+    assert(Array.isArray(articles));
+    assert(articles.length > 0);
+  });
 });
 ```
 
-## Common Modules
+## Best Practices Summary
 
-### Essential Apostrophe Modules
-- **@apostrophecms/piece-type**: Base for content types
-- **@apostrophecms/page-type**: Base for page types
-- **@apostrophecms/widget-type**: Base for widgets
-- **@apostrophecms/rich-text-widget**: WYSIWYG editor
-- **@apostrophecms/image-widget**: Image management
-- **@apostrophecms/video-widget**: Video embeds
-- **@apostrophecms/form**: Form builder
-- **@apostrophecms/sitemap**: XML sitemap
-- **@apostrophecms/redirect**: URL redirects
-- **@apostrophecms/seo**: SEO tools
+### DO:
+✅ Use environment variables for configuration  
+✅ Implement proper caching strategies  
+✅ Optimize images with appropriate sizes  
+✅ Follow Apostrophe naming conventions  
+✅ Write tests for custom modules  
+✅ Use areas for flexible content  
 
-### Community Modules
-- **apostrophe-blog**: Blog functionality
-- **apostrophe-events**: Event management
-- **apostrophe-workflow**: Content workflow
-- **apostrophe-elasticsearch**: Search integration
+### DON'T:
+❌ Hardcode sensitive information  
+❌ Skip input sanitization  
+❌ Ignore performance implications  
+❌ Modify core modules directly  
+❌ Use synchronous operations in handlers

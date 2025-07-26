@@ -21,7 +21,7 @@ Try it: Start any conversation with `<Health-Check>` to see session status!
 ```
 .
 ├── .claude/
-│   ├── best_practices/  # Technology-specific best practices
+│   ├── agents/  # Technology-specific best practices
 │   │   ├── angular-best-practices.md
 │   │   ├── api-design-best-practices.md
 │   │   ├── apostrophe-best-practices.md
